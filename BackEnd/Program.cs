@@ -1,3 +1,6 @@
+using DAL;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+var conString = builder.Configuration.GetConnectionString("DbContext") ??
+     throw new InvalidOperationException("Connection string 'DbContext not found.");
+builder.Services.AddDbContext<DBContext>(options =>
+    options.UseSqlServer(conString));
 
 var app = builder.Build();
 

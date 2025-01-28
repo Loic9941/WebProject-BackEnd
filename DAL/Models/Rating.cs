@@ -19,7 +19,7 @@ namespace DAL.Models
 
         public int Stars { get; set; }
 
-        public int AuthorId { get; set; }
-        public virtual Contact Author { get; set; }
+        public int ContactId { get; set; }
+        public virtual Contact Contact { get; set; }
     }
 }

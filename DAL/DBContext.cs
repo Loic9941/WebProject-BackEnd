@@ -22,22 +22,37 @@ namespace DAL
                 .HasOne(r => r.Product)
                 .WithMany(p => p.Ratings)
                 .HasForeignKey(r => r.ProductId)
-                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.Ratings)
                 .WithOne(r => r.Product)
                 .HasForeignKey(r => r.ProductId)
-                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Rating>()
-                .HasOne(r => r.Author)
+                .HasOne(r => r.Contact)
                 .WithMany(c => c.Ratings)
-                .HasForeignKey(r => r.AuthorId)
-                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+                .HasForeignKey(r => r.ContactId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Contact>()
                 .HasMany(c => c.Ratings)
-                .WithOne(r => r.Author)
-                .HasForeignKey(r => r.AuthorId)
-                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+                .WithOne(r => r.Contact)
+                .HasForeignKey(r => r.ContactId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Contact)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.ContactId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Contact>()
+                .HasMany(c => c.Products)
+                .WithOne(p => p.Contact)
+                .HasForeignKey(p => p.ContactId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

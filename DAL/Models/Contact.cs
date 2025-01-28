@@ -11,6 +11,6 @@ namespace DAL.Models
 
         public List<Rating> Ratings { get; set; }
 
-        /*public List<Product> Products { get; set; }*/
+        public List<Product> Products { get; set; }
     }
 }

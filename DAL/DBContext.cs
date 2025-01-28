@@ -28,6 +28,16 @@ namespace DAL
                 .WithOne(r => r.Product)
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.Author)
+                .WithMany(c => c.Ratings)
+                .HasForeignKey(r => r.AuthorId)
+                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            modelBuilder.Entity<Contact>()
+                .HasMany(c => c.Ratings)
+                .WithOne(r => r.Author)
+                .HasForeignKey(r => r.AuthorId)
+                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
         }
     }
 }

@@ -14,10 +14,10 @@ namespace DAL.Models
         [Key]
         public int Id { get; set; }
 
-        /*public int ProductId { get; set; }
+        public int ProductId { get; set; }
         public virtual Product Product { get; set; }
 
-        public int Stars { get; set; }
+        /*public int Stars { get; set; }
 
         public int AuthorId { get; set; }
         public virtual Contact Author { get; set; }*/

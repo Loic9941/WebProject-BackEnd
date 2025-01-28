@@ -15,8 +15,8 @@ namespace DAL.Models
         public decimal Price { get; set; }
 
         public int AuthorId { get; set; }
-        public virtual Contact Author { get; set; } 
-        public List<Rating> Ratings { get; set; }*/
+        public virtual Contact Author { get; set; }*/
+        public List<Rating> Ratings { get; set; }
 
     }
 }

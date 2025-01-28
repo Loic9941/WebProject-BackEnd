@@ -18,9 +18,16 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
-
-
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Ratings)
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
+            modelBuilder.Entity<Product>()
+                .HasMany(p => p.Ratings)
+                .WithOne(r => r.Product)
+                .HasForeignKey(r => r.ProductId)
+                .OnDelete(deleteBehavior: DeleteBehavior.Cascade);
         }
     }
 }

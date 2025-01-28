@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace DAL.Models
 {
-    public class Order
+    public class InvoiceItem
     {
+        [Key]
         public int Id { get; set; }
         public int? InvoiceId { get; set; }
         public virtual Invoice? Invoice { get; set; }

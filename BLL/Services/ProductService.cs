@@ -8,13 +8,18 @@ using DAL.Repository;
 
 namespace BLL.Services
 {
-    public class ProductService
+    public class ProductService : IProductService
     {
-        private readonly IRepository<Product> _productRepository;
+        private readonly IProductRepository _productRepository;
 
-        public ProductService(IRepository<Product> productRepository)
+        public ProductService(IProductRepository productRepository)
         {
             _productRepository = productRepository;
+        }
+
+        public IEnumerable<Product> GetProducts()
+        {
+            return _productRepository.Get();
         }
 
     }

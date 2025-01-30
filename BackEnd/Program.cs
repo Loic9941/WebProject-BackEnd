@@ -1,4 +1,6 @@
+using BLL.Services;
 using DAL;
+using DAL.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,10 @@ var conString = builder.Configuration.GetConnectionString("DbContext") ??
      throw new InvalidOperationException("Connection string 'DbContext not found.");
 builder.Services.AddDbContext<DBContext>(options =>
     options.UseSqlServer(conString));
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductService, ProductService>();
+
 
 var app = builder.Build();
 

@@ -1,6 +1,4 @@
-﻿using BackEnd;
-using BLL.Services;
-using DAL.Models;
+﻿using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
 using PL.DTOs;
 
@@ -19,9 +17,9 @@ namespace PL.Controllers
 
         
         [HttpGet(Name = "GetProducts")]
-        public IEnumerable<Product> Get() //Fix me
+        public IEnumerable<ProductDTO> GetProducts()
         {
-            return _productService.GetProducts();
+            return _productService.GetProducts().Select(p => p.MapToDto());
         }
 
     }

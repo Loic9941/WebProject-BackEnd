@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using DAL.Models;
+﻿using BLL.ServiceDTOs;
 using DAL.Repository;
 
 namespace BLL.Services
@@ -17,9 +12,9 @@ namespace BLL.Services
             _productRepository = productRepository;
         }
 
-        public IEnumerable<Product> GetProducts()
+        public IEnumerable<ProductServiceDTO> GetProducts()
         {
-            return _productRepository.Get();
+            return _productRepository.Get().Select(p => p.MapToDto());
         }
 
     }

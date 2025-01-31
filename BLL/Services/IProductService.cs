@@ -1,10 +1,10 @@
 ﻿
-using DAL.Models;
+using BLL.ServiceDTOs;
 
 namespace BLL.Services
 {
     public interface IProductService
     {
-        IEnumerable<Product> GetProducts();
+        IEnumerable<ProductServiceDTO> GetProducts();
     }
 }

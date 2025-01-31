@@ -1,9 +1,11 @@
 ﻿using DAL.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    public class DBContext : DbContext
+    public class DBContext : IdentityDbContext<IdentityUser>
     {
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
@@ -18,6 +20,7 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Rating>()
                 .HasOne(r => r.Product)
                 .WithMany(p => p.Ratings)

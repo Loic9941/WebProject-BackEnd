@@ -1,6 +1,6 @@
 ﻿namespace PL.DTOs
 {
-    public class ProductDTO
+    public class ProductModel
     {
         public int Id { get; set; }
 

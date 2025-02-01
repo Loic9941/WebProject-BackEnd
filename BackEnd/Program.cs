@@ -48,6 +48,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 
 var app = builder.Build();

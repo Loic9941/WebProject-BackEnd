@@ -40,7 +40,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Invoice", b =>
@@ -53,7 +53,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Invoices");
+                    b.ToTable("Invoices", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.InvoiceItem", b =>
@@ -66,7 +66,7 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InvoiceItems");
+                    b.ToTable("InvoiceItems", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Product", b =>
@@ -95,7 +95,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ContactId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Models.Rating", b =>
@@ -121,7 +121,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

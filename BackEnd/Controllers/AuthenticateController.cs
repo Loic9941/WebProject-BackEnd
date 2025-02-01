@@ -1,12 +1,7 @@
-﻿using BLL.Services;
-using Microsoft.AspNetCore.Identity;
+﻿using System.IdentityModel.Tokens.Jwt;
+using BLL.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using PL.DTOs;
 using PL.Identity;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 
 namespace PL.Controllers
 {
@@ -30,9 +25,13 @@ namespace PL.Controllers
                 var token = await _authenticationService.Login(model.MapToDto());
                 if (token == null)
                 {
-                    Unauthorized();
+                    return Unauthorized();
                 }
-                return Ok(token);
+                return Ok(new
+                {
+                    token = token.token,
+                    expiration = token.expiration
+                });
             }
             catch (Exception ex)
             {
@@ -41,18 +40,85 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
-
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        [Route("register-customer")]
+        public async Task<IActionResult> RegisterCustomer([FromBody] RegisterModel model)
         {
-           
+            try
+            {
+                var result = await _authenticationService.RegisterCustomer(model.MapToDto());
+                if (result == true)
+                {
+                    return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                //fix me : we have to differentiate between user creation failed and user already exists
+                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            }
         }
 
         [HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin([FromBody] RegisterModel model)
         {
-            
+            try
+            {
+                var result = await _authenticationService.RegisterAdmin(model.MapToDto());
+                if (result == true)
+                {
+                    return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                //fix me : we have to differentiate between user creation failed and user already exists
+                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+            }
+        }
+
+        [HttpPost]
+        [Route("register-artisan")]
+        public async Task<IActionResult> RegisterArtisan([FromBody] RegisterModel model)
+        {
+            try
+            {
+                var result = await _authenticationService.RegisterArtisan(model.MapToDto());
+                if (result == true)
+                {
+                    return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                //fix me : we have to differentiate between user creation failed and user already exists
+                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+
+            }
+        }
+
+        [HttpPost]
+        [Route("register-delivery-partner")]
+        public async Task<IActionResult> RegisterDeliveryPartner([FromBody] RegisterModel model)
+        {
+            try
+            {
+                var result = await _authenticationService.RegisterArtisan(model.MapToDto());
+                if (result == true)
+                {
+                    return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
+                }
+                return BadRequest(result);
+            }
+            catch (Exception ex)
+            {
+                //fix me : we have to differentiate between user creation failed and user already exists
+                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
+
+            }
         }
     }
 }

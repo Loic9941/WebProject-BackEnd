@@ -1,4 +1,5 @@
 ﻿
+using System.Net.NetworkInformation;
 using BLL.Identity;
 using BLL.ServiceDTOs;
 using DAL.Models;
@@ -27,6 +28,17 @@ namespace PL
                 Username = login.Username,
                 Password = login.Password
 
+            };
+        }
+
+        public static RegisterModelServiceDTO MapToDto(this RegisterModel register)
+        {
+            if (register == null) return null;
+            return new RegisterModelServiceDTO
+            {
+                Username = register.Username,
+                Password = register.Password,
+                Email = register.Email
             };
         }
     }

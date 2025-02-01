@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
 using BLL.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -55,11 +56,11 @@ namespace BLL.Services
             return null;
         }
 
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<bool> Register(RegisterModelServiceDTO model, string UserRole)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User already exists!" });
+                throw new Exception("User already exists!");
             IdentityUser user = new()
             {
                 Email = model.Email,
@@ -68,8 +69,32 @@ namespace BLL.Services
             };
             var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError, new AuthResponse { Status = "Error", Message = "User creation failed! Please check user details and try again." });
-            return Ok(new AuthResponse { Status = "Success", Message = "User created successfully!" });
+                throw new Exception("User creation failed! Please check user details and try again.");
+            if (!await _roleManager.RoleExistsAsync(UserRole))
+                await _roleManager.CreateAsync(new IdentityRole(UserRole));
+            if (await _roleManager.RoleExistsAsync(UserRole))
+                await _userManager.AddToRoleAsync(user, UserRole);
+            return true;
+        }
+
+        public async Task<bool> RegisterAdmin(RegisterModelServiceDTO model)
+        {
+            return await Register(model, UserRoles.Admin);
+        }
+
+        public async Task<bool> RegisterArtisan(RegisterModelServiceDTO model)
+        {
+            return await Register(model, UserRoles.Artisan);
+        }
+
+        public async Task<bool> RegisterCustomer(RegisterModelServiceDTO model)
+        {
+            return await Register(model, UserRoles.Customer);
+        }
+
+        public async Task<bool> RegisterDeliveryPartner(RegisterModelServiceDTO model)
+        {
+            return await Register(model, UserRoles.DeliveryPartner);
         }
 
         private JwtSecurityToken GetToken(List<Claim> authClaims)
@@ -86,3 +111,4 @@ namespace BLL.Services
 
         }
     }
+}

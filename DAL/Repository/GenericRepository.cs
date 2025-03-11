@@ -6,72 +6,73 @@ namespace DAL.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        internal DBContext context;
-        internal DbSet<T> dbSet;
+        private readonly DBContext _context;
 
         public GenericRepository(DBContext context)
         {
-            this.context = context;
-            this.dbSet = context.Set<T>();
+            _context = context;
         }
 
-        public virtual IEnumerable<T> Get(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
-            string includeProperties = "")
+        public async Task<T?> GetSingleOrDefault(
+            Expression<Func<T, bool>>? filter = null,
+            string includeProperties = ""
+        )
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query = GetQuery(filter, includeProperties);
+            return await query.SingleOrDefaultAsync();
+        }
 
+        private IQueryable<T> GetQuery(
+            Expression<Func<T, bool>>? filter = null,
+            string includeProperties = ""
+        )
+        {
+            IQueryable<T> query = _context.Set<T>();
             if (filter != null)
             {
                 query = query.Where(filter);
             }
-
             foreach (var includeProperty in includeProperties.Split
-                (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                ([','], StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
+            return query;
+        }
 
+        public async Task<IEnumerable<T>> GetAsync(
+            Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            string includeProperties = "")
+        {
+
+            IQueryable<T> query = GetQuery(filter, includeProperties);
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return await orderBy(query).ToListAsync();
             }
             else
             {
-                return query.ToList();
+                return await query.ToListAsync();
             }
         }
 
-        public virtual T GetByID(object id)
+        public async Task AddAsync(T entity)
         {
-            return dbSet.Find(id);
+            await _context.Set<T>().AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public virtual void Insert(T entity)
+        public async Task DeleteAsync(T entity)
         {
-            dbSet.Add(entity);
+            _context.Set<T>().Remove(entity);
+            await _context.SaveChangesAsync();
         }
 
-        public virtual void Delete(object id)
+        public async Task UpdateAsync(T entity)
         {
-            T entityToDelete = dbSet.Find(id);
-            Delete(entityToDelete);
-        }
-
-        public virtual void Delete(T entityToDelete)
-        {
-            if (context.Entry(entityToDelete).State == EntityState.Detached)
-            {
-                dbSet.Attach(entityToDelete);
-            }
-            dbSet.Remove(entityToDelete);
-        }
-
-        public virtual void Update(T entityToUpdate)
-        {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            _context.Set<T>().Update(entity);
+            await _context.SaveChangesAsync();
         }
     }
 }

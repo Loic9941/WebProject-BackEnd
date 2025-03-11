@@ -1,8 +1,6 @@
 ﻿
-using System.Net.NetworkInformation;
-using BLL.Identity;
+using BLL.IdentityDTOs;
 using BLL.ServiceDTOs;
-using DAL.Models;
 using PL.DTOs;
 using PL.Identity;
 
@@ -10,20 +8,27 @@ namespace PL
 {
     public static class Mapper
     {
-        public static ProductModel MapToDto(this ProductServiceDTO product)
+        //Product
+        public static ProductModel MapToModel(this ProductServiceDTO product)
         {
-            if (product == null) return null;
-
             return new ProductModel
             {
                 Id = product.Id
             };
         }
 
-        public static LoginModelServiceDTO MapToDto(this LoginModel login)
+        public static ProductServiceDTO MapToDTO(this ProductModel product)
+        {
+                return new ProductServiceDTO
+            {
+                Id = product.Id
+            };
+        }
+
+        public static LoginDTO MapToDto(this LoginModel login)
         {
             if (login == null) return null;
-            return new LoginModelServiceDTO
+            return new LoginDTO
             {
                 Username = login.Username,
                 Password = login.Password
@@ -31,10 +36,10 @@ namespace PL
             };
         }
 
-        public static RegisterModelServiceDTO MapToDto(this RegisterModel register)
+        public static RegisterDTO MapToDto(this RegisterModel register)
         {
             if (register == null) return null;
-            return new RegisterModelServiceDTO
+            return new RegisterDTO
             {
                 Username = register.Username,
                 Password = register.Password,

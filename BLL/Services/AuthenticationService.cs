@@ -2,6 +2,8 @@
 using System.Security.Claims;
 using System.Text;
 using BLL.Identity;
+using BLL.IdentityDTOs;
+using BLL.IService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -24,7 +26,7 @@ namespace BLL.Services
             _configuration = configuration;
         }
 
-        public async Task<TokenModelServiceDTO?> Login(LoginModelServiceDTO model)
+        public async Task<TokenDTO?> Login(LoginDTO model)
         {
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
@@ -40,7 +42,7 @@ namespace BLL.Services
                     authClaims.Add(new Claim(ClaimTypes.Role, userRole));
                 }
                 var token = GetToken(authClaims);
-                return new TokenModelServiceDTO
+                return new TokenDTO
                 {
                     token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo
@@ -49,7 +51,7 @@ namespace BLL.Services
             return null;
         }
 
-        public async Task<bool> Register(RegisterModelServiceDTO model, string UserRole)
+        public async Task<bool> Register(RegisterDTO model, string UserRole)
         {
             var userExists = await _userManager.FindByNameAsync(model.Username);
             if (userExists != null)
@@ -70,22 +72,22 @@ namespace BLL.Services
             return true;
         }
 
-        public async Task<bool> RegisterAdmin(RegisterModelServiceDTO model)
+        public async Task<bool> RegisterAdmin(RegisterDTO model)
         {
             return await Register(model, UserRoles.Admin);
         }
 
-        public async Task<bool> RegisterArtisan(RegisterModelServiceDTO model)
+        public async Task<bool> RegisterArtisan(RegisterDTO model)
         {
             return await Register(model, UserRoles.Artisan);
         }
 
-        public async Task<bool> RegisterCustomer(RegisterModelServiceDTO model)
+        public async Task<bool> RegisterCustomer(RegisterDTO model)
         {
             return await Register(model, UserRoles.Customer);
         }
 
-        public async Task<bool> RegisterDeliveryPartner(RegisterModelServiceDTO model)
+        public async Task<bool> RegisterDeliveryPartner(RegisterDTO model)
         {
             return await Register(model, UserRoles.DeliveryPartner);
         }

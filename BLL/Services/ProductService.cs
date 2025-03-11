@@ -1,20 +1,23 @@
-﻿using BLL.ServiceDTOs;
+﻿using BLL.IService;
+using BLL.ServiceDTOs;
+using DAL.Models;
 using DAL.Repository;
 
 namespace BLL.Services
 {
     public class ProductService : IProductService
     {
-        private readonly IProductRepository _productRepository;
+        private readonly GenericRepository<Product> _productRepository;
 
-        public ProductService(IProductRepository productRepository)
+        public ProductService(GenericRepository<Product> productRepository)
         {
             _productRepository = productRepository;
         }
 
-        public IEnumerable<ProductServiceDTO> GetProducts()
+        public  async Task<IEnumerable<ProductServiceDTO>> GetAsync()
         {
-            return _productRepository.Get().Select(p => p.MapToDto());
+
+            return (await _productRepository.GetAsync()).Select(p => p.MapToDto());
         }
 
     }

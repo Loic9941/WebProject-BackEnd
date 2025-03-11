@@ -1,4 +1,4 @@
-﻿using BLL.Services;
+﻿using BLL.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PL.DTOs;
@@ -19,9 +19,9 @@ namespace PL.Controllers
 
         
         [HttpGet(Name = "GetProducts")]
-        public IEnumerable<ProductModel> GetProducts()
+        public async Task<IEnumerable<ProductModel>> GetProducts()
         {
-            return _productService.GetProducts().Select(p => p.MapToDto());
+            return (await _productService.GetAsync()).Select(p => p.MapToModel());
         }
 
     }

@@ -9,22 +9,21 @@ namespace DAL.Repository
 {
     public interface IGenericRepository<T> where T : class
     {
-        IEnumerable<T> Get(
-            Expression<Func<T, bool>> filter = null,
-            Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null,
+        Task<T?> GetSingleOrDefault(
+            Expression<Func<T, bool>>? filter = null,
+            string includeProperties = ""
+        );
+
+        Task<IEnumerable<T>> GetAsync(
+            Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "");
 
-        T GetByID(object id);
+        Task AddAsync(T entity);
 
-        /*IEnumerable<T> GetAll();*/
+        Task DeleteAsync(T entity);
 
-        void Insert(T entity);
-
-        void Delete(object id);
-
-        /*IEnumerable<T> FindAll();*/
-
-        void Update(T entity);
+        Task UpdateAsync(T entity);
 
     }
 }

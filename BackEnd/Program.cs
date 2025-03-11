@@ -1,6 +1,8 @@
 using System.Text;
+using BLL.IService;
 using BLL.Services;
 using DAL;
+using DAL.Models;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -46,7 +48,10 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
+//Repositories
+builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
+
+//services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 

@@ -13,7 +13,10 @@ namespace BLL
 
             return new ProductServiceDTO
             {
-                Id = product.Id
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
             };
         }
 
@@ -21,7 +24,10 @@ namespace BLL
         {
             return new Product
             {
-                Id = product.Id
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
             };
         }
     }

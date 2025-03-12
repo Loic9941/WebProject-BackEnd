@@ -5,9 +5,9 @@ using PL.DTOs;
 
 namespace PL.Controllers
 {
-    [Authorize]
+    /*[Authorize]*/
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
         protected readonly IProductService _productService;

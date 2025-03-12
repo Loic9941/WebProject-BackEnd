@@ -1,5 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using BLL.IService;
+﻿using BLL.IService;
 using Microsoft.AspNetCore.Mvc;
 using PL.Identity;
 

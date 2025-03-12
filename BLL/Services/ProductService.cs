@@ -7,9 +7,9 @@ namespace BLL.Services
 {
     public class ProductService : IProductService
     {
-        private readonly GenericRepository<Product> _productRepository;
+        private readonly IGenericRepository<Product> _productRepository;
 
-        public ProductService(GenericRepository<Product> productRepository)
+        public ProductService(IGenericRepository<Product> productRepository)
         {
             _productRepository = productRepository;
         }

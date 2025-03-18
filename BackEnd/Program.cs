@@ -2,7 +2,7 @@ using System.Text;
 using BLL.IService;
 using BLL.Services;
 using DAL;
-using DAL.Models;
+using Domain;
 using DAL.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -53,7 +53,6 @@ builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Produc
 
 //services
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 
 builder.Services.AddCors(options => {
     options.AddDefaultPolicy(

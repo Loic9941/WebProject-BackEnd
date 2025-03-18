@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DAL.Models
+namespace Domain
 {
     public class Contact
     {
@@ -13,8 +13,8 @@ namespace DAL.Models
         [Required]
         public required string Lastname { get; set; }
 
-        public List<Rating> Ratings { get; set; }
+        public List<Rating> Ratings { get; set; } = [];
 
-        public List<Product> Products { get; set; }
+        public List<Product> Products { get; set; } = [];
     }
 }

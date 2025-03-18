@@ -1,6 +1,5 @@
 ﻿using BLL.IService;
-using BLL.ServiceDTOs;
-using DAL.Models;
+using Domain;
 using DAL.Repository;
 
 namespace BLL.Services
@@ -14,10 +13,10 @@ namespace BLL.Services
             _productRepository = productRepository;
         }
 
-        public  async Task<IEnumerable<ProductServiceDTO>> GetAsync()
+        public  async Task<IEnumerable<Product>> GetAsync()
         {
 
-            return (await _productRepository.GetAsync()).Select(p => p.MapToDto());
+            return await _productRepository.GetAsync();
         }
 
     }

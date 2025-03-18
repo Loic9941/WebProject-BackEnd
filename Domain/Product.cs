@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace DAL.Models
+namespace Domain
 {
     public class Product
     {
@@ -16,8 +16,8 @@ namespace DAL.Models
 
         [Required]
         public int ContactId { get; set; }
-        public virtual Contact Contact{ get; set; }
-        public List<Rating> Ratings { get; set; }
+        public virtual Contact Contact{ get; set; } = null!;
+        public List<Rating> Ratings { get; set; } = [];
 
     }
 }

@@ -1,9 +1,9 @@
-﻿using BLL.ServiceDTOs;
+﻿using Domain;
 
 namespace BLL.IService
 {
     public interface IProductService
     {
-        public Task<IEnumerable<ProductServiceDTO>> GetAsync();
+        public Task<IEnumerable<Product>> GetAsync();
     }
 }

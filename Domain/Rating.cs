@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DAL.Models
+namespace Domain
 {
     public class Rating
     {
@@ -9,12 +9,12 @@ namespace DAL.Models
 
         [Required]
         public required int ProductId { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual Product Product { get; set; } = null!;
 
         public int Stars { get; set; }
 
         [Required]
         public required int ContactId { get; set; }
-        public virtual Contact Contact { get; set; }
+        public virtual Contact Contact { get; set; } = null!;
     }
 }

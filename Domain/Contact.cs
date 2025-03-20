@@ -16,5 +16,9 @@ namespace Domain
         public List<Rating> Ratings { get; set; } = [];
 
         public List<Product> Products { get; set; } = [];
+
+        public List<Invoice> Invoices { get; set; } = [];
+
+
     }
 }

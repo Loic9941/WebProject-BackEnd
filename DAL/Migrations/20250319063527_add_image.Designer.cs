@@ -3,6 +3,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250319063527_add_image")]
+    partial class add_image
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,10 +103,6 @@ namespace DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte[]>("Image")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -116,6 +115,29 @@ namespace DAL.Migrations
                     b.HasIndex("ContactId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Domain.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Image")
+                        .IsRequired()
+                        .HasColumnType("image");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId")
+                        .IsUnique();
+
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("Domain.Rating", b =>
@@ -185,6 +207,17 @@ namespace DAL.Migrations
                     b.Navigation("Contact");
                 });
 
+            modelBuilder.Entity("Domain.ProductImage", b =>
+                {
+                    b.HasOne("Domain.Product", "Product")
+                        .WithOne("Image")
+                        .HasForeignKey("Domain.ProductImage", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("Domain.Rating", b =>
                 {
                     b.HasOne("Domain.Contact", "Contact")
@@ -220,6 +253,8 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.Product", b =>
                 {
+                    b.Navigation("Image");
+
                     b.Navigation("InvoiceItems");
 
                     b.Navigation("Ratings");

@@ -11,13 +11,17 @@ namespace Domain
         public required string Name { get; set; }
         public string? Description { get; set; }
 
+        public byte[] Image { get; set; } = [];
+
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
         [Required]
         public int ContactId { get; set; }
-        public virtual Contact Contact{ get; set; } = null!;
-        public List<Rating> Ratings { get; set; } = [];
+        public virtual Contact? Contact { get; set; }
+        public virtual List<Rating> Ratings { get; set; } = [];
+
+        public virtual List<InvoiceItem> InvoiceItems { get; set; } = [];
 
     }
 }

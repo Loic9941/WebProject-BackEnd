@@ -19,6 +19,6 @@ namespace Domain
 
         public List<Invoice> Invoices { get; set; } = [];
 
-
+        public virtual User? user { get; set; }
     }
 }

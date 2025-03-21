@@ -13,13 +13,13 @@ namespace DAL.Repository
             _context = context;
         }
 
-        public async Task<T?> GetSingleOrDefault(
+        public T? GetSingleOrDefault(
             Expression<Func<T, bool>>? filter = null,
             string includeProperties = ""
         )
         {
             IQueryable<T> query = GetQuery(filter, includeProperties);
-            return await query.SingleOrDefaultAsync();
+            return query.SingleOrDefault();
         }
 
         private IQueryable<T> GetQuery(
@@ -40,7 +40,7 @@ namespace DAL.Repository
             return query;
         }
 
-        public async Task<IEnumerable<T>> GetAsync(
+        public IEnumerable<T> Get(
             Expression<Func<T, bool>>? filter = null,
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "")
@@ -49,30 +49,30 @@ namespace DAL.Repository
             IQueryable<T> query = GetQuery(filter, includeProperties);
             if (orderBy != null)
             {
-                return await orderBy(query).ToListAsync();
+                return orderBy(query).ToList();
             }
             else
             {
-                return await query.ToListAsync();
+                return query.ToList();
             }
         }
 
-        public async Task AddAsync(T entity)
+        public void Add(T entity)
         {
-            await _context.Set<T>().AddAsync(entity);
-            await _context.SaveChangesAsync();
+            _context.Set<T>().Add(entity);
+            _context.SaveChanges();
         }
 
-        public async Task DeleteAsync(T entity)
+        public void Delete(T entity)
         {
             _context.Set<T>().Remove(entity);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
-        public async Task UpdateAsync(T entity)
+        public void Update(T entity)
         {
             _context.Set<T>().Update(entity);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
     }
 }

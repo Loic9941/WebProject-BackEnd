@@ -5,12 +5,12 @@ namespace BLL.IService
 {
     public interface IProductService
     {
-        public Task<IEnumerable<Product>> GetAsync();
+        public IEnumerable<Product> Get();
 
-        public Task<Product> AddAsync(Product product, IFormFile image);
+        public Product Add(Product product, IFormFile? image);
 
-        public Task<Product> GetByIdAsync(int Id);
+        public Product GetById(int Id);
 
-        public Task<Product> UpdateAsync(int Id, Product product, IFormFile image);
+        public Product Update(int Id, Product product, IFormFile? image);
     }
 }

@@ -14,13 +14,13 @@ namespace BLL.Services
             _productRepository = productRepository;
         }
 
-        public  async Task<IEnumerable<Product>> GetAsync()
+        public  IEnumerable<Product> Get()
         {
 
-            return await _productRepository.GetAsync();
+            return  _productRepository.Get();
         }
 
-        public async Task<Product> AddAsync(Product product, IFormFile image)
+        public Product Add(Product product, IFormFile? image)
         {
             if (image != null)
             {
@@ -31,19 +31,19 @@ namespace BLL.Services
                 }
             }
             product.ContactId = 1;//Fix me with auth user
-            await _productRepository.AddAsync(product);
+            _productRepository.Add(product);
             return product;
         }
 
-        public async Task<Product> GetByIdAsync(int Id)
+        public Product GetById(int Id)
         {
-            return await _productRepository.GetSingleOrDefault(x => x.Id == Id);
+            return _productRepository.GetSingleOrDefault(x => x.Id == Id);
         }
 
-        public async Task<Product> UpdateAsync(int Id, Product product, IFormFile image)
+        public Product Update(int Id, Product product, IFormFile? image)
         {
             
-            Product productToUpdate = await this.GetByIdAsync(Id);
+            Product productToUpdate = this.GetById(Id);
             productToUpdate.Name = product.Name;
             productToUpdate.Description = product.Description;
             productToUpdate.Price = product.Price;
@@ -55,7 +55,7 @@ namespace BLL.Services
                     productToUpdate.Image = ms.ToArray();
                 }
             }
-            await _productRepository.UpdateAsync(productToUpdate);
+             _productRepository.Update(productToUpdate);
             return product;
         }
 

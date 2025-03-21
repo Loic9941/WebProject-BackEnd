@@ -5,23 +5,18 @@ namespace Domain
     public class User
     {
 
-        public User(string username, string passwordHash, string salt)
-        {
-            Username = username;
-            this.passwordHash = passwordHash;
-            Salt = salt;
-        }
         [Key]
         public int Id { get; set; }
 
-        public string Username { get; set; }
-        public string Salt { get; set; }
+        public required string Email { get; set; }
+        public required string Salt { get; set; }
 
-        public string passwordHash { get; set; }
+        public required string PasswordHash { get; set; }
+
+        public required string Role { get; set; } = "User";
 
         public virtual Contact? contact { get; set; } = null!;
         public int? ContactId { get; set; }
-
 
     }
 }

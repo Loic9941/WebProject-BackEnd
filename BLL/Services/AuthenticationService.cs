@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using BLL.DTOs;
 using BLL.IService;
 using DAL.Repository;
 using Domain;
@@ -15,26 +16,31 @@ namespace BLL.Services
 
         protected IConfiguration _config;
         protected IGenericRepository<User> _userRepository;
+        protected IGenericRepository<Contact> _contactRepository;
 
         public AuthenticationService(
             IConfiguration config,
-            IGenericRepository<User> userRepository
+            IGenericRepository<User> userRepository,
+            IGenericRepository<Contact> contactRepository
+
             )
         {
             _config = config;
             _userRepository = userRepository;
+            _contactRepository = contactRepository;
         }
 
         private string GenerateJSONWebToken(string username)
         {
-            var secretKey = _config["Jwt:Key"];
+            var secretKey = _config["Jwt:Secret"];
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
                 new Claim("custom_info", "info"),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.Role, _userRepository.GetSingleOrDefault(x => x.Email == username).Role)
             };
 
             var jwtIssuer = _config["Jwt:Issuer"];
@@ -63,22 +69,27 @@ namespace BLL.Services
             return Convert.ToHexString(hash);
         }
 
-        public void RegisterUser(string username, string password)
+        public void RegisterUser(RegisterDTO registerDTO)
         {
-            User? user = _userRepository.GetSingleOrDefault(User => User.Username.ToLower() == username.ToLower()) ?? throw new Exception("User already exist");
-            var salt = DateTime.Now.ToString("dddd"); // get the day of week. Ex: Sunday
-            var passwordHash = HashPassword(password, salt);
-            _userRepository.Add(new User(username, passwordHash, salt));
+            var listUser = _userRepository.Get(User => User.Email.ToLower() == registerDTO.Email.ToLower());
+            if (listUser.Any())
+            {
+                throw new Exception("User already exist");
+            }
+            var salt = DateTime.Now.ToString("dddd");
+            var passwordHash = HashPassword(registerDTO.Password, salt);
+            int contactId = _contactRepository.Add(new Contact { Firstname = registerDTO.Firstname, Lastname = registerDTO.Lastname });
+            _userRepository.Add(new User { Email = registerDTO.Email, PasswordHash = passwordHash, Salt = salt, Role = registerDTO.Role, ContactId = contactId });
         }
 
-        public string Login(string username, string password)
+        public string Login(LoginDTO loginDTO)
         {
-            User? user = _userRepository.GetSingleOrDefault(User => User.Username.ToLower() == username.ToLower()) ?? throw new Exception("Login failed; Invalid userID or password");
+            User? user = _userRepository.GetSingleOrDefault(User => User.Email.ToLower() == loginDTO.Email.ToLower()) ?? throw new Exception("Login failed; Invalid userID or password");
 
-            var passwordHash = HashPassword(password, user.Salt);
-            if (user.passwordHash == passwordHash)
+            var passwordHash = HashPassword(loginDTO.Password, user.Salt);
+            if (user.PasswordHash == passwordHash)
             {
-                var token = GenerateJSONWebToken(username);
+                var token = GenerateJSONWebToken(loginDTO.Email);
                 return token;
             }
             throw new Exception("Login failed; Invalid userID or password");

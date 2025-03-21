@@ -9,8 +9,9 @@ namespace BLL.IService
 
         public Product Add(Product product, IFormFile? image);
 
-        public Product GetById(int Id);
+        public Product GetById(int Id); 
 
         public Product Update(int Id, Product product, IFormFile? image);
+        public void Delete(int Id);
     }
 }

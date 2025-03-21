@@ -14,7 +14,7 @@ namespace DAL.Repository
             Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
             string includeProperties = "");
 
-        void Add(T entity);
+        int Add(T entity);
 
         void Delete(T entity);
 

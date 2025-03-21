@@ -57,10 +57,11 @@ namespace DAL.Repository
             }
         }
 
-        public void Add(T entity)
+        public int Add(T entity)
         {
             _context.Set<T>().Add(entity);
             _context.SaveChanges();
+            return (int)_context.Entry(entity).Property("Id").CurrentValue;
         }
 
         public void Delete(T entity)

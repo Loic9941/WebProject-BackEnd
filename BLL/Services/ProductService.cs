@@ -2,16 +2,21 @@
 using Domain;
 using DAL.Repository;
 using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BLL.Services
 {
+    [Authorize]
     public class ProductService : IProductService
     {
         private readonly IGenericRepository<Product> _productRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ProductService(IGenericRepository<Product> productRepository)
+        public ProductService(IGenericRepository<Product> productRepository, IHttpContextAccessor httpContextAccessor)
         {
             _productRepository = productRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public  IEnumerable<Product> Get()
@@ -20,6 +25,7 @@ namespace BLL.Services
             return  _productRepository.Get();
         }
 
+        [Authorize(Roles= "Artisan")]
         public Product Add(Product product, IFormFile? image)
         {
             if (image != null)
@@ -30,7 +36,13 @@ namespace BLL.Services
                     product.Image = ms.ToArray();
                 }
             }
-            product.ContactId = 1;//Fix me with auth user
+            //the contact id is the connected user
+            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId != null)
+            {
+                product.ContactId = int.Parse(userId);
+            }
+            else throw new Exception("User not found");
             _productRepository.Add(product);
             return product;
         }
@@ -40,6 +52,7 @@ namespace BLL.Services
             return _productRepository.GetSingleOrDefault(x => x.Id == Id);
         }
 
+        [Authorize(Roles = "Artisan, Admin")]
         public Product Update(int Id, Product product, IFormFile? image)
         {
             
@@ -57,7 +70,13 @@ namespace BLL.Services
             }
              _productRepository.Update(productToUpdate);
             return product;
+
         }
 
+        [Authorize(Roles = "Artisan, Admin")]
+        public void Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

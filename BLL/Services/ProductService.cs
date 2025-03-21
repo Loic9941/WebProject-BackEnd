@@ -37,12 +37,14 @@ namespace BLL.Services
                 }
             }
             //the contact id is the connected user
-            var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            /*var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId != null)
             {
                 product.ContactId = int.Parse(userId);
             }
-            else throw new Exception("User not found");
+            else throw new Exception("User not found");*/
+            //Fix me 
+            product.ContactId = 2;
             _productRepository.Add(product);
             return product;
         }

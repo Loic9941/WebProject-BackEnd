@@ -74,8 +74,9 @@ namespace BLL.Services
         public string Login(string username, string password)
         {
             User? user = _userRepository.GetSingleOrDefault(User => User.Username.ToLower() == username.ToLower()) ?? throw new Exception("Login failed; Invalid userID or password");
+
             var passwordHash = HashPassword(password, user.Salt);
-            if (user.Password == passwordHash)
+            if (user.passwordHash == passwordHash)
             {
                 var token = GenerateJSONWebToken(username);
                 return token;

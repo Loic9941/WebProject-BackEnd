@@ -39,6 +39,8 @@ builder.Services.AddAuthentication(opt => {
 //Repositories
 builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
 builder.Services.AddScoped<IGenericRepository<Contact>, GenericRepository<Contact>>();
+builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+
 
 //services
 builder.Services.AddScoped<IProductService, ProductService>();

@@ -13,7 +13,7 @@ namespace Domain
 
         public required string PasswordHash { get; set; }
 
-        public required string Role { get; set; } = "User";
+        public required string Role { get; set; } = "Customer";
 
         public virtual Contact? contact { get; set; } = null!;
         public int? ContactId { get; set; }

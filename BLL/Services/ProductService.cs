@@ -11,17 +11,20 @@ namespace BLL.Services
     public class ProductService : IProductService
     {
         private readonly IGenericRepository<Product> _productRepository;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IAuthenticationService _authenticationService;
 
-        public ProductService(IGenericRepository<Product> productRepository, IHttpContextAccessor httpContextAccessor)
+        public ProductService(IGenericRepository<Product> productRepository, IAuthenticationService authenticationService)
         {
             _productRepository = productRepository;
-            _httpContextAccessor = httpContextAccessor;
+            _authenticationService = authenticationService;
         }
 
         public  IEnumerable<Product> Get()
         {
-
+            if (_authenticationService.IsArtisan())
+            {
+                return _productRepository.Get(x => x.ContactId == _authenticationService.GetContactId());
+            }
             return  _productRepository.Get();
         }
 
@@ -36,15 +39,8 @@ namespace BLL.Services
                     product.Image = ms.ToArray();
                 }
             }
-            //the contact id is the connected user
-            /*var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != null)
-            {
-                product.ContactId = int.Parse(userId);
-            }
-            else throw new Exception("User not found");*/
-            //Fix me 
-            product.ContactId = 2;
+            var contactId = _authenticationService.GetContactId() ?? throw new Exception("User not found");
+            product.ContactId = contactId;
             _productRepository.Add(product);
             return product;
         }
@@ -78,7 +74,12 @@ namespace BLL.Services
         [Authorize(Roles = "Artisan, Admin")]
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            Product product = this.GetById(id);
+            if(_authenticationService.IsArtisan() && product.ContactId != _authenticationService.GetContactId())
+            {
+                throw new Exception("You are not authorized to delete this product");
+            }
+            _productRepository.Delete(product);
         }
     }
 }

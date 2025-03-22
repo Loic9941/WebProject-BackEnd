@@ -6,6 +6,7 @@ using BLL.DTOs;
 using BLL.IService;
 using DAL.Repository;
 using Domain;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,17 +18,20 @@ namespace BLL.Services
         protected IConfiguration _config;
         protected IGenericRepository<User> _userRepository;
         protected IGenericRepository<Contact> _contactRepository;
+        protected IHttpContextAccessor _httpContextAccessor;
 
         public AuthenticationService(
             IConfiguration config,
             IGenericRepository<User> userRepository,
-            IGenericRepository<Contact> contactRepository
+            IGenericRepository<Contact> contactRepository,
+            IHttpContextAccessor httpContextAccessor
 
             )
         {
             _config = config;
             _userRepository = userRepository;
             _contactRepository = contactRepository;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         private string GenerateJSONWebToken(string username)
@@ -93,6 +97,39 @@ namespace BLL.Services
                 return token;
             }
             throw new Exception("Login failed; Invalid userID or password");
+        }
+
+        public int? GetContactId()
+        {
+            var userEmail = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userEmail != null)
+            {
+                var user = _userRepository.GetSingleOrDefault(x => x.Email == userEmail);
+                return user?.ContactId;
+            }
+            return null;
+        }
+
+        public bool IsAdmin()
+        {
+            return _httpContextAccessor.HttpContext?.User?.IsInRole("Administrator") ?? false;
+
+        }
+
+        public bool IsArtisan()
+        {
+            return _httpContextAccessor.HttpContext?.User?.IsInRole("Artisan") ?? false;
+
+        }
+
+        public bool IsCustomer()
+        {
+            return _httpContextAccessor.HttpContext?.User?.IsInRole("Customer") ?? false;
+        }
+
+        public bool IsDeliveryPartner()
+        {
+            return _httpContextAccessor.HttpContext?.User?.IsInRole("DeliveryPartner") ?? false;
         }
     }
 }

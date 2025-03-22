@@ -42,6 +42,12 @@ namespace API.Controllers
             return _productService.Update(Id, product, image);
         }
 
+        [HttpDelete("{id}", Name = "DeleteProduct")]
+        public void DeleteProduct(int id)
+        {
+            _productService.Delete(id);
+        }
+
 
     }
 }

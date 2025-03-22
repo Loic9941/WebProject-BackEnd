@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
 
@@ -25,7 +26,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
-        public async Task<Product> GetProduct(int id)
+        public Product GetProduct(int id)
         {
             return _productService.GetById(id);
         }
@@ -47,7 +48,5 @@ namespace API.Controllers
         {
             _productService.Delete(id);
         }
-
-
     }
 }

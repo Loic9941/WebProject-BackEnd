@@ -49,11 +49,11 @@ namespace DAL.Repository
             IQueryable<T> query = GetQuery(filter, includeProperties);
             if (orderBy != null)
             {
-                return orderBy(query).ToList();
+                return orderBy(query).IgnoreAutoIncludes().ToList();
             }
             else
             {
-                return query.ToList();
+                return query.IgnoreAutoIncludes().ToList();
             }
         }
 

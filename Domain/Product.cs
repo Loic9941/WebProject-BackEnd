@@ -17,11 +17,11 @@ namespace Domain
         public decimal Price { get; set; }
 
         [Required]
-        public int ContactId { get; set; }
-        public virtual Contact? Contact { get; set; }
-        public virtual List<Rating> Ratings { get; set; } = [];
+        public int UserId { get; set; }
+        public virtual User? User { get; set; }
+        public virtual List<Rating>? Ratings { get; set; } = [];
 
-        public virtual List<InvoiceItem> InvoiceItems { get; set; } = [];
+        public virtual List<InvoiceItem>? InvoiceItems { get; set; } = [];
 
     }
 }

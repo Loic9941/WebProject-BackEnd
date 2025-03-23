@@ -7,9 +7,12 @@ namespace Domain
         [Key]
         public int Id { get; set; }
 
-        public int ContactId { get; set; }
-        public virtual Contact? Contact { get; set; } = null!;
+        public int UserId { get; set; }
+        public virtual User? User { get; set; } = null!;
 
-        public List<InvoiceItem> InvoiceItems { get; set; } = [];
+        public virtual List<InvoiceItem>? InvoiceItems { get; set; } = [];
+
+        //Possible status : "Pending", "Paid", "Shipped", "Delivered"
+        public string Status { get; set; } = "Pending";
     }
 }

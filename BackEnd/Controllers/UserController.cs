@@ -1,4 +1,5 @@
 ﻿using BLL.IService;
+using BLL.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,20 @@ namespace Api.Controllers
         public IEnumerable<User> GetUsers()
         {
             return _userService.GetUsers();
+        }
+
+        [HttpDelete("{id}", Name = "DeleteUser")]
+        public ActionResult DeleteUser(int id)
+        {
+            try
+            {
+                _userService.DeleteUser(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

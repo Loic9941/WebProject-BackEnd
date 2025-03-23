@@ -12,23 +12,31 @@ namespace BLL.Services
     {
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IAuthenticationService _authenticationService;
+        private readonly IGenericRepository<Invoice> _invoiceRepository;
+        private readonly IGenericRepository<InvoiceItem> _invoiceItemRepository;
 
-        public ProductService(IGenericRepository<Product> productRepository, IAuthenticationService authenticationService)
+        public ProductService(
+            IGenericRepository<Product> productRepository, 
+            IAuthenticationService authenticationService,
+            IGenericRepository<Invoice> invoiceRepository,
+            IGenericRepository<InvoiceItem> invoiceItemRepository
+            )
         {
             _productRepository = productRepository;
             _authenticationService = authenticationService;
+            _invoiceRepository = invoiceRepository;
+            _invoiceItemRepository = invoiceItemRepository;
         }
 
         public  IEnumerable<Product> Get()
         {
             if (_authenticationService.IsArtisan())
             {
-                return _productRepository.Get(x => x.ContactId == _authenticationService.GetContactId());
+                return _productRepository.Get(x => x.Id == _authenticationService.GetUserId());
             }
             return  _productRepository.Get();
         }
 
-        [Authorize(Roles= "Artisan")]
         public Product Add(Product product, IFormFile? image)
         {
             if (image != null)
@@ -39,22 +47,29 @@ namespace BLL.Services
                     product.Image = ms.ToArray();
                 }
             }
-            var contactId = _authenticationService.GetContactId() ?? throw new Exception("User not found");
-            product.ContactId = contactId;
+            var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
+            product.UserId = userId;
             _productRepository.Add(product);
             return product;
         }
 
-        public Product GetById(int Id)
+        public Product? GetById(int Id)
         {
             return _productRepository.GetSingleOrDefault(x => x.Id == Id);
         }
 
-        [Authorize(Roles = "Artisan, Admin")]
         public Product Update(int Id, Product product, IFormFile? image)
         {
             
-            Product productToUpdate = this.GetById(Id);
+            Product? productToUpdate = this.GetById(Id);
+            if (productToUpdate == null)
+            {
+                throw new Exception("Product not found");
+            }
+            if (_authenticationService.IsArtisan() && productToUpdate.UserId != _authenticationService.GetUserId())
+            {
+                throw new Exception("You are not authorized to update this product");
+            }
             productToUpdate.Name = product.Name;
             productToUpdate.Description = product.Description;
             productToUpdate.Price = product.Price;
@@ -71,11 +86,10 @@ namespace BLL.Services
 
         }
 
-        [Authorize(Roles = "Artisan, Admin")]
         public void Delete(int id)
         {
-            Product product = this.GetById(id);
-            if(_authenticationService.IsArtisan() && product.ContactId != _authenticationService.GetContactId())
+            Product? product = this.GetById(id) ?? throw new Exception("Product not found");
+            if (_authenticationService.IsArtisan() && product.UserId != _authenticationService.GetUserId())
             {
                 throw new Exception("You are not authorized to delete this product");
             }

@@ -4,7 +4,6 @@ namespace Domain
 {
     public class User
     {
-
         [Key]
         public int Id { get; set; }
 
@@ -15,8 +14,16 @@ namespace Domain
 
         public required string Role { get; set; } = "Customer";
 
-        public virtual Contact? contact { get; set; } = null!;
-        public int? ContactId { get; set; }
+        [Required]
+        public required string Firstname { get; set; }
 
+        [Required]
+        public required string Lastname { get; set; }
+
+        public List<Rating> Ratings { get; set; } = [];
+
+        public List<Product> Products { get; set; } = [];
+
+        public List<Invoice> Invoices { get; set; } = [];
     }
 }

@@ -7,13 +7,11 @@ namespace DAL
 {
     public class DBContext :DbContext
     {
-        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-
-        public DbSet<User> Users { get; set; }
 
         public DBContext(DbContextOptions<DBContext> options) : base(options)
         {
@@ -36,9 +34,9 @@ namespace DAL
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Product>()
-                .HasOne(p => p.Contact)
+                .HasOne(p => p.User)
                 .WithMany(c => c.Products)
-                .HasForeignKey(p => p.ContactId)
+                .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)
@@ -49,9 +47,9 @@ namespace DAL
 
             //Rating
             modelBuilder.Entity<Rating>()
-                .HasOne(r => r.Contact)
+                .HasOne(r => r.User)
                 .WithMany(c => c.Ratings)
-                .HasForeignKey(r => r.ContactId)
+                .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Rating>()
                 .HasOne(r => r.Product)
@@ -60,22 +58,22 @@ namespace DAL
                 .OnDelete(DeleteBehavior.Cascade);
 
             //Contact
-            modelBuilder.Entity<Contact>()
+            modelBuilder.Entity<User>()
                 .HasMany(c => c.Ratings)
-                .WithOne(r => r.Contact)
-                .HasForeignKey(r => r.ContactId)
+                .WithOne(r => r.User)
+                .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Contact>()
+            modelBuilder.Entity<User>()
                 .HasMany(c => c.Products)
-                .WithOne(p => p.Contact)
-                .HasForeignKey(p => p.ContactId)
+                .WithOne(p => p.User)
+                .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             //Invoice
             modelBuilder.Entity<Invoice>()
-                .HasOne(i => i.Contact)
+                .HasOne(i => i.User)
                 .WithMany(c => c.Invoices)
-                .HasForeignKey(i => i.ContactId)
+                .HasForeignKey(i => i.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Invoice>()
                 .HasMany(i => i.InvoiceItems)
@@ -94,7 +92,6 @@ namespace DAL
                 .WithMany(p => p.InvoiceItems)
                 .HasForeignKey(ii => ii.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
-
         }
     }
 }

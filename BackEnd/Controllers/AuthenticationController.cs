@@ -35,9 +35,15 @@ namespace Api.Controllers
         [AllowAnonymous]
         public ActionResult Login(LoginDTO loginDTO)
         {
-
-            var token = _authenticationService.Login(loginDTO);
-            return Ok(new { Token = token });
+            try
+            {
+                var token = _authenticationService.Login(loginDTO);
+                return Ok(new { Token = token });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

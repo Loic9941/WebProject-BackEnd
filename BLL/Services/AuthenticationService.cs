@@ -17,20 +17,18 @@ namespace BLL.Services
 
         protected IConfiguration _config;
         protected IGenericRepository<User> _userRepository;
-        protected IGenericRepository<Contact> _contactRepository;
         protected IHttpContextAccessor _httpContextAccessor;
 
         public AuthenticationService(
             IConfiguration config,
             IGenericRepository<User> userRepository,
-            IGenericRepository<Contact> contactRepository,
+            IGenericRepository<User> contactRepository,
             IHttpContextAccessor httpContextAccessor
 
             )
         {
             _config = config;
             _userRepository = userRepository;
-            _contactRepository = contactRepository;
             _httpContextAccessor = httpContextAccessor;
         }
 
@@ -82,8 +80,14 @@ namespace BLL.Services
             }
             var salt = DateTime.Now.ToString("dddd");
             var passwordHash = HashPassword(registerDTO.Password, salt);
-            int contactId = _contactRepository.Add(new Contact { Firstname = registerDTO.Firstname, Lastname = registerDTO.Lastname });
-            _userRepository.Add(new User { Email = registerDTO.Email, PasswordHash = passwordHash, Salt = salt, Role = registerDTO.Role, ContactId = contactId });
+            _userRepository.Add(new User { 
+                Email = registerDTO.Email, 
+                PasswordHash = passwordHash, 
+                Salt = salt, 
+                Role = registerDTO.Role,
+                Firstname = registerDTO.Firstname,
+                Lastname = registerDTO.Lastname
+            });
         }
 
         public string Login(LoginDTO loginDTO)
@@ -99,13 +103,13 @@ namespace BLL.Services
             throw new Exception("Login failed; Invalid userID or password");
         }
 
-        public int? GetContactId()
+        public int? GetUserId()
         {
             var userEmail = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userEmail != null)
             {
                 var user = _userRepository.GetSingleOrDefault(x => x.Email == userEmail);
-                return user?.ContactId;
+                return user?.Id;
             }
             return null;
         }

@@ -7,7 +7,7 @@ namespace BLL.IService
         public void RegisterUser(RegisterDTO registerDTO);
         public string Login(LoginDTO loginDTO);
 
-        public int? GetContactId();
+        public int? GetUserId();
 
         public bool IsAdmin();
 

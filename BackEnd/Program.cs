@@ -7,6 +7,7 @@ using DAL.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
@@ -37,19 +38,24 @@ builder.Services.AddAuthentication(opt => {
             });
 //Repositories
 builder.Services.AddScoped<IGenericRepository<Product>, GenericRepository<Product>>();
-builder.Services.AddScoped<IGenericRepository<Contact>, GenericRepository<Contact>>();
 builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
-
+builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
+builder.Services.AddScoped<IGenericRepository<Invoice>, GenericRepository<Invoice>>();
+builder.Services.AddScoped<IGenericRepository<InvoiceItem>, GenericRepository<InvoiceItem>>();
 
 //services
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 
 

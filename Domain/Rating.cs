@@ -14,7 +14,7 @@ namespace Domain
         public int Stars { get; set; }
 
         [Required]
-        public required int ContactId { get; set; }
-        public virtual Contact? Contact { get; set; } = null!;
+        public required int UserId { get; set; }
+        public virtual User? User { get; set; } = null!;
     }
 }

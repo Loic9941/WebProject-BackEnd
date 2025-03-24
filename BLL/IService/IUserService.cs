@@ -7,5 +7,7 @@ namespace BLL.IService
         public IEnumerable<User> GetUsers();
 
         public void DeleteUser(int id);
+
+        public IEnumerable<User> GetDeliveryPartners();
     }
 }

@@ -42,5 +42,9 @@ namespace BLL.Services
             _userRepository.Delete(user);
         }
 
+        public IEnumerable<User> GetDeliveryPartners()
+        {
+            return _userRepository.Get(x => x.Role == "DeliveryPartner");
+        }
     }
 }

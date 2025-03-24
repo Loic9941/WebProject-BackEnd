@@ -14,5 +14,9 @@ namespace Domain
 
         //Possible status : "Pending", "Paid", "Shipped", "Delivered"
         public string Status { get; set; } = "Pending";
+
+        public int? DeliveryPartnerId { get; set; }
+        public virtual User? DeliveryPartner { get; set; } = null!;
+
     }
 }

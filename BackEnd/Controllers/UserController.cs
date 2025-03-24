@@ -18,7 +18,9 @@ namespace Api.Controllers
             _userService = userService;
         }
 
+
         [HttpGet(Name = "GetUsers")]
+        [Authorize(Roles= "Administrator")]
         public IEnumerable<User> GetUsers()
         {
             return _userService.GetUsers();
@@ -36,6 +38,13 @@ namespace Api.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
+
+        [HttpGet("GetDeliveryPartners", Name = "GetDeliveryPartners")]
+        [Authorize(Roles = "Customer")]
+        public ActionResult<IEnumerable<User>> GetDeliveryPartners()
+        {
+            return Ok(_userService.GetDeliveryPartners());
         }
     }
 }

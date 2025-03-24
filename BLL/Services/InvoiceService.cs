@@ -27,7 +27,7 @@ namespace BLL.Services
 
         public Invoice? GetById(int Id)
         {  
-            return _invoiceRepository.GetSingleOrDefault(x => x.Id == Id, "InvoiceItems");
+            return _invoiceRepository.GetSingleOrDefault(x => x.Id == Id, "InvoiceItems,InvoiceItems.Product");
         }
 
         public IEnumerable<Invoice> Get()
@@ -57,13 +57,23 @@ namespace BLL.Services
             {
                 invoiceId = invoice.Id;
             }
-            _invoiceItemRepository.Add(new InvoiceItem
+            //check if there is already an invoice item with the same product
+            var existingInvoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.InvoiceId == invoiceId && x.ProductId == Id);
+            if (existingInvoiceItem == null) {
+                _invoiceItemRepository.Add(new InvoiceItem
+                {
+                    InvoiceId = invoiceId,
+                    ProductId = Id,
+                    UnitPrice = product.Price,
+                    Quantity = 1
+                });
+            }
+            else
             {
-                InvoiceId = invoiceId,
-                ProductId = Id,
-                Amount = product.Price
-            });
-
+                existingInvoiceItem.UnitPrice = product.Price; // to be sure to have the last price
+                existingInvoiceItem.Quantity += 1;
+                _invoiceItemRepository.Update(existingInvoiceItem);
+            }
             return this.GetById(invoiceId) ?? throw new Exception("Invoice not found");
         }
     }

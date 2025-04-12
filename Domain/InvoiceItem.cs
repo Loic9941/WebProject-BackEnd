@@ -20,5 +20,19 @@ namespace Domain
 
         public int Quantity { get; set; }
 
+        // inPreparation ,pickedUp, inTransit, delivered
+        public string Status { get; set; } = null!;
+
+        public DateTime? EstimatedDeliveryDate { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? InPreparationAt { get; set; }
+
+        public DateTime? PickedUpAt { get; set; }
+
+        public DateTime? InTransitAt { get; set; }
+
+        public DateTime? DeliveredAt { get; set; }
     }
 }

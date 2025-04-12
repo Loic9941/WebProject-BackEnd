@@ -1,4 +1,5 @@
-﻿using BLL.IService;
+﻿using BLL.DTOs;
+using BLL.IService;
 using DAL.Repository;
 using Domain;
 
@@ -25,13 +26,26 @@ namespace BLL.Services
             _productRepository = productRepository;
         }
 
-        public Invoice? GetById(int Id)
+        public Invoice? GetById(int id)
         {  
-            return _invoiceRepository.GetSingleOrDefault(x => x.Id == Id, "InvoiceItems,InvoiceItems.Product");
+            return _invoiceRepository.GetSingleOrDefault(
+                x => x.Id == id, 
+                "InvoiceItems,InvoiceItems.Product,DeliveryPartner"
+                );
         }
 
         public IEnumerable<Invoice> Get()
         {
+            var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
+            if (_authenticationService.IsCustomer())
+            {
+                return _invoiceRepository.Get(x => x.UserId == _authenticationService.GetUserId(),null, "InvoiceItems");
+            }
+            if (_authenticationService.IsDeliveryPartner())
+            {
+                return _invoiceRepository.Get(x => x.DeliveryPartnerId == _authenticationService.GetUserId(), null, "InvoiceItems");
+            }
+            //for admin : 
             return _invoiceRepository.Get();
         }
 
@@ -41,16 +55,27 @@ namespace BLL.Services
             return _invoiceRepository.GetSingleOrDefault(x => x.UserId == userId && x.Status == "pending", "InvoiceItems");
         }
 
-        public Invoice AddToInvoice(int Id)
+        public void MarkAsPaid(int invoiceId, MarkAsPaidDTO markAsPaidDTO)
+        {
+            Invoice invoiceToMarkAsPaid = _invoiceRepository.GetSingleOrDefault(
+                x => x.Id == invoiceId
+                ) ?? throw new Exception("Invoice not found");
+            invoiceToMarkAsPaid.Status = "paid";
+            invoiceToMarkAsPaid.DeliveryPartnerId = markAsPaidDTO.DeliveryPartnerId;
+            invoiceToMarkAsPaid.PaidAt = DateTime.Now;
+            _invoiceRepository.Update(invoiceToMarkAsPaid);
+        }
+
+        public Invoice AddToInvoice(int id)
         {
             int invoiceId = 0;
 
-            Product? product = this._productRepository.GetSingleOrDefault(x => x.Id == Id) ?? throw new Exception("Product not found");
+            Product? product = this._productRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Product not found");
             var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
             Invoice? invoice = _invoiceRepository.GetSingleOrDefault(x => x.Status == "Pending" && x.UserId == userId);
             if (invoice == null)
             {
-                invoice = new Invoice { UserId = userId, Status = "pending" };
+                invoice = new Invoice { UserId = userId, Status = "pending", CreatedAt = DateTime.Now };
                 invoiceId = _invoiceRepository.Add(invoice);
             }
             else
@@ -58,12 +83,12 @@ namespace BLL.Services
                 invoiceId = invoice.Id;
             }
             //check if there is already an invoice item with the same product
-            var existingInvoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.InvoiceId == invoiceId && x.ProductId == Id);
+            var existingInvoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.InvoiceId == invoiceId && x.ProductId == id);
             if (existingInvoiceItem == null) {
                 _invoiceItemRepository.Add(new InvoiceItem
                 {
                     InvoiceId = invoiceId,
-                    ProductId = Id,
+                    ProductId = id,
                     UnitPrice = product.Price,
                     Quantity = 1
                 });

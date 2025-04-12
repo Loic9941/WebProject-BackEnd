@@ -1,4 +1,5 @@
-﻿using BLL.IService;
+﻿using BLL.DTOs;
+using BLL.IService;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -53,6 +54,21 @@ namespace Api.Controllers
             {
                 Invoice? invoice = _invoiceService.GetPendingInvoice();
                 return Ok(invoice);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Customer")]
+        [HttpPut("{id}/MarkAsPaid", Name = "MarkAsPaid")]
+        public ActionResult MarkAsPaid(int id, MarkAsPaidDTO markAsPaidDTO)
+        {
+            try
+            {
+                _invoiceService.MarkAsPaid(id, markAsPaidDTO);
+                return NoContent();
             }
             catch (Exception e)
             {

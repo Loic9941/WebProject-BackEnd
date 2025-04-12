@@ -32,7 +32,7 @@ namespace BLL.Services
         {
             if (_authenticationService.IsArtisan())
             {
-                return _productRepository.Get(x => x.Id == _authenticationService.GetUserId());
+                return _productRepository.Get(x => x.UserId == _authenticationService.GetUserId());
             }
             return  _productRepository.Get();
         }

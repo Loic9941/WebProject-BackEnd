@@ -45,5 +45,24 @@ namespace Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize(Roles = "Admin, DeliveryPertner, Artisan")]
+        [HttpGet("{id}", Name = "GetInvoiceItem")]
+        public ActionResult GetInvoiceItem(int id) 
+        {
+            try
+            {
+                InvoiceItem? invoiceItem = _invoiceItemService.GetById(id);
+                if (invoiceItem == null)
+                {
+                    return NotFound();
+                }
+                return Ok(invoiceItem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

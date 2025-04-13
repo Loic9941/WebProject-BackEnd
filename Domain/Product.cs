@@ -17,7 +17,7 @@ namespace Domain
         public decimal Price { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public required int UserId { get; set; }
         public virtual User? User { get; set; }
         public virtual List<Rating>? Ratings { get; set; } = [];
 

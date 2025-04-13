@@ -28,10 +28,18 @@ namespace BLL.Services
 
         public Invoice? GetById(int id)
         {  
-            return _invoiceRepository.GetSingleOrDefault(
+            var invoice = _invoiceRepository.GetSingleOrDefault(
                 x => x.Id == id, 
                 "InvoiceItems,InvoiceItems.Product,DeliveryPartner"
                 );
+            if(
+                !_authenticationService.IsAdmin() && 
+                invoice is not null && 
+                invoice.UserId != _authenticationService.GetUserId())
+            {
+                throw new Exception("You are not authorized to access this invoice");
+            }
+            return invoice;
         }
 
         public IEnumerable<Invoice> Get()
@@ -88,7 +96,9 @@ namespace BLL.Services
                     InvoiceId = invoiceId,
                     ProductId = id,
                     UnitPrice = product.Price,
-                    Quantity = 1
+                    Quantity = 1,
+                    Description = product.Description,
+                    UserId = product.UserId,
                 });
             }
             else

@@ -22,10 +22,13 @@ namespace Domain
 
         public List<Rating>? Ratings { get; set; } = [];
 
-        public List<Product>? Products { get; set; } = [];
-
+        //this one are the invoice linked to the customer
         public List<Invoice>? Invoices { get; set; } = [];
 
-        public List<Invoice>? InvoicesToDeliver { get; set; } = [];
+        //this one are the invoice Items linked to the artist
+        public List<InvoiceItem>? InvoiceItems { get; set; } = [];
+
+        //this one are the products linked to the artist
+        public List<Product>? Products { get; set; } = [];
     }
 }

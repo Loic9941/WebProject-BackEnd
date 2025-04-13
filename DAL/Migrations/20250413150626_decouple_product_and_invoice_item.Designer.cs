@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250413150626_decouple_product_and_invoice_item")]
+    partial class decouple_product_and_invoice_item
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -97,16 +100,11 @@ namespace DAL.Migrations
                     b.Property<decimal>("UnitPrice")
                         .HasColumnType("money");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("InvoiceId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("InvoiceItems");
                 });
@@ -209,7 +207,7 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Invoice", b =>
                 {
                     b.HasOne("Domain.User", "DeliveryPartner")
-                        .WithMany()
+                        .WithMany("InvoicesToDeliver")
                         .HasForeignKey("DeliveryPartnerId");
 
                     b.HasOne("Domain.User", "User")
@@ -236,17 +234,9 @@ namespace DAL.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Domain.User", "User")
-                        .WithMany("InvoiceItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.ClientCascade)
-                        .IsRequired();
-
                     b.Navigation("Invoice");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Product", b =>
@@ -293,9 +283,9 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.User", b =>
                 {
-                    b.Navigation("InvoiceItems");
-
                     b.Navigation("Invoices");
+
+                    b.Navigation("InvoicesToDeliver");
 
                     b.Navigation("Products");
 

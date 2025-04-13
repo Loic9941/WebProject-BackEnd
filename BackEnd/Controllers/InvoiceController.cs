@@ -77,7 +77,7 @@ namespace Api.Controllers
             }
         }
 
-
+        [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}", Name = "GetInvoice")]
         public ActionResult<Invoice> GetInvoice(int id)
         {

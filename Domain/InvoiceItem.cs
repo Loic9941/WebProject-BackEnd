@@ -11,9 +11,16 @@ namespace Domain
         public int InvoiceId { get; set; }
         public virtual Invoice Invoice { get; set; } = null!;
 
-        public int ProductId { get; set; }
+        public required int? ProductId { get; set; }
 
-        public Product Product { get; set; } = null!;
+        public Product? Product { get; set; } = null!;
+
+        //to allow to delete a product
+        public required string Description;
+
+        [Required]
+        public required int UserId { get; set; }
+        public virtual User? User { get; set; }
 
         [Column(TypeName = "money")]
         public decimal UnitPrice { get; set; }

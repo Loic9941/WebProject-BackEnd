@@ -7,5 +7,7 @@ namespace BLL.IService
         public void Delete(int invoiceItemId);
 
         public IEnumerable<InvoiceItem> GetInvoiceItems();
+
+        public InvoiceItem? GetById(int id);
     }
 }

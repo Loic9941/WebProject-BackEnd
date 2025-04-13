@@ -32,13 +32,20 @@ namespace BLL.Services
             }
         }
 
+        public InvoiceItem? GetById(int id)
+        {
+            return _invoiceItemRepository.GetSingleOrDefault(
+                x => x.Id == id,
+                "Product");
+        }
+
         public IEnumerable<InvoiceItem> GetInvoiceItems()
         {
             var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
             if (_authenticationService.IsArtisan())
             {
                 return _invoiceItemRepository.Get(
-                    x => x.Product.UserId == userId, 
+                    x => x.UserId == userId,
                     q => q.OrderByDescending(i => i.CreatedAt), 
                     "Invoice,Product"
                 );

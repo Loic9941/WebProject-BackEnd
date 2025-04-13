@@ -43,7 +43,8 @@ namespace DAL
                 .HasColumnType("money");
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.InvoiceItems)
-                .WithOne(ii => ii.Product);
+                .WithOne(ii => ii.Product)
+                .OnDelete(DeleteBehavior.SetNull);
 
             //Rating
             modelBuilder.Entity<Rating>()
@@ -57,7 +58,7 @@ namespace DAL
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //Contact
+            //User
             modelBuilder.Entity<User>()
                 .HasMany(c => c.Ratings)
                 .WithOne(r => r.User)
@@ -91,7 +92,15 @@ namespace DAL
                 .HasOne(ii => ii.Product)
                 .WithMany(p => p.InvoiceItems)
                 .HasForeignKey(ii => ii.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<InvoiceItem>()
+                .HasOne(ii => ii.User)
+                .WithMany(c => c.InvoiceItems)
+                .HasForeignKey(ii => ii.UserId)
+                .OnDelete(DeleteBehavior.ClientCascade);
+            modelBuilder.Entity<InvoiceItem>()
+                .Property(p => p.UnitPrice)
+                .HasColumnType("money");
         }
     }
 }

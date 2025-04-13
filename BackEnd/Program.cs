@@ -42,6 +42,7 @@ builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 builder.Services.AddScoped<IGenericRepository<Invoice>, GenericRepository<Invoice>>();
 builder.Services.AddScoped<IGenericRepository<InvoiceItem>, GenericRepository<InvoiceItem>>();
+builder.Services.AddScoped<IGenericRepository<Rating>, GenericRepository<Rating>>();
 
 //services
 builder.Services.AddScoped<IProductService, ProductService>();

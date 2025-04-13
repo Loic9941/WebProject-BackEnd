@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using BLL.DTOs;
+using Domain;
 
 namespace BLL.IService
 {
@@ -9,5 +10,10 @@ namespace BLL.IService
         public IEnumerable<InvoiceItem> GetInvoiceItems();
 
         public InvoiceItem? GetById(int id);
+
+        public InvoiceItem? MarkAsReadyToBeShipped(int id);
+        public InvoiceItem? MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO);
+        public InvoiceItem? MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO);
+        public InvoiceItem? MarkAsDelivered(int id);
     }
 }

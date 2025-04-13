@@ -1,4 +1,5 @@
-﻿using BLL.IService;
+﻿using BLL.DTOs;
+using BLL.IService;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, DeliveryPertner, Artisan")]
+        [Authorize(Roles = "Admin, DeliveryPartner, Artisan")]
         [HttpGet("{id}", Name = "GetInvoiceItem")]
         public ActionResult GetInvoiceItem(int id) 
         {
@@ -57,6 +58,70 @@ namespace Api.Controllers
                 {
                     return NotFound();
                 }
+                return Ok(invoiceItem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, Artisan")]
+        [HttpPut("{id}/markAsReadyToBeShipped", Name = "MarkAsReadyToBeShipped")]
+        public ActionResult MarkAsReadyToBeShipped(int id)
+        {
+            try
+            {
+
+                var invoiceItem = _invoiceItemService.MarkAsReadyToBeShipped(id);
+                return Ok(invoiceItem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, DeliveryPartner")]
+        [HttpPut("{id}/markAsPickedUp", Name = "MarkAsPickedUp")]
+        public ActionResult MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
+        {
+            try
+            {
+
+                var invoiceItem = _invoiceItemService.MarkAsPickedUp(id, markInvoiceItemAsDTO);
+                return Ok(invoiceItem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, DeliveryPartner")]
+        [HttpPut("{id}/markAsInTransit", Name = "MarkAsInTransit")]
+        public ActionResult MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
+        {
+            try
+            {
+
+                var invoiceItem = _invoiceItemService.MarkAsInTransit(id, markInvoiceItemAsDTO);
+                return Ok(invoiceItem);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin, DeliveryPartner")]
+        [HttpPut("{id}/markAsDelivered", Name = "markAsDelivered")]
+        public ActionResult MarkAsDelivered(int id)
+        {
+            try
+            {
+
+                var invoiceItem = _invoiceItemService.MarkAsDelivered(id);
                 return Ok(invoiceItem);
             }
             catch (Exception e)

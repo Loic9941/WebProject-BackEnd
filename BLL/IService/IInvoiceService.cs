@@ -14,7 +14,7 @@ namespace BLL.IService
 
         public IEnumerable<Invoice> Get();
 
-        public void MarkAsPaid(int invoiceId, MarkAsPaidDTO markAsPaidDTO);
+        public void MarkAsPaid(int invoiceId, MarkInvoiceAsPaidDTO markAsPaidDTO);
 
     }
 }

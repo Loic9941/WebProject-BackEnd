@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using BLL.DTOs;
+using Domain;
 using Microsoft.AspNetCore.Http;
 
 namespace BLL.IService
@@ -10,5 +11,6 @@ namespace BLL.IService
         public Product? GetById(int id); 
         public Product Update(int id, Product product, IFormFile? image);
         public void Delete(int id);
+        public void RateProduct(int id, RateProductDTO rateProductDTO);
     }
 }

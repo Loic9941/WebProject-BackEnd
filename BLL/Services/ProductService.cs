@@ -4,6 +4,9 @@ using DAL.Repository;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using BLL.DTOs;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Errors;
 
 namespace BLL.Services
 {
@@ -12,20 +15,20 @@ namespace BLL.Services
     {
         private readonly IGenericRepository<Product> _productRepository;
         private readonly IAuthenticationService _authenticationService;
-        private readonly IGenericRepository<Invoice> _invoiceRepository;
         private readonly IGenericRepository<InvoiceItem> _invoiceItemRepository;
+        private readonly IGenericRepository<Rating> _ratingRepository;
 
         public ProductService(
             IGenericRepository<Product> productRepository, 
             IAuthenticationService authenticationService,
-            IGenericRepository<Invoice> invoiceRepository,
-            IGenericRepository<InvoiceItem> invoiceItemRepository
+            IGenericRepository<InvoiceItem> invoiceItemRepository,
+            IGenericRepository<Rating> ratingRepository
             )
         {
             _productRepository = productRepository;
             _authenticationService = authenticationService;
-            _invoiceRepository = invoiceRepository;
             _invoiceItemRepository = invoiceItemRepository;
+            _ratingRepository = ratingRepository;
         }
 
         public  IEnumerable<Product> Get()
@@ -94,6 +97,36 @@ namespace BLL.Services
                 throw new Exception("You are not authorized to delete this product");
             }
             _productRepository.Delete(product);
+        }
+
+        public void RateProduct(int id, RateProductDTO rateProductDTO)
+        {
+            Product? product = this.GetById(id) ?? throw new Exception("Product not found");
+            IEnumerable<InvoiceItem> invoiceItem = _invoiceItemRepository.Get(
+                x => x.ProductId == id && 
+                x.Invoice.UserId == _authenticationService.GetUserId()
+            );
+            if (invoiceItem.Count() == 0)
+            {
+                throw new Exception("You must have purchased this product to rate it");
+            }
+            //check if there is already a rating for this user and this product
+            _ratingRepository.GetSingleOrDefault(
+                x => x.ProductId == id &&
+                x.UserId == _authenticationService.GetUserId()
+            );
+            if (product.Ratings.Any(x => x.UserId == _authenticationService.GetUserId()))
+            {
+                throw new RatingConflict();
+            }
+            product.Ratings.Add(new Rating
+            {
+                ProductId = id,
+                UserId = _authenticationService.GetUserId() ?? throw new Exception("User not found"),
+                Rate = rateProductDTO.Rate,
+                Comment = rateProductDTO.Comment,
+            });
+            _productRepository.Update(product);
         }
     }
 }

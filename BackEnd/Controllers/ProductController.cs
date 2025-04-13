@@ -1,6 +1,8 @@
-﻿using BLL.IService;
+﻿using BLL.DTOs;
+using BLL.IService;
 using BLL.Services;
 using Domain;
+using Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -65,5 +67,29 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize(Roles = "Customer")]
+        [HttpPost("{id}/rate/", Name = "RateProduct")]
+        public ActionResult RateProduct(int id, RateProductDTO rateProductDTO)
+        {
+            try
+            {
+                _productService.RateProduct(id, rateProductDTO);
+                return Ok();
+            }
+            catch (RatingConflict e )
+            {
+                return Conflict(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
+
+
+
     }
 }

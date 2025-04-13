@@ -19,9 +19,9 @@ namespace Domain
         [Required]
         public required int UserId { get; set; }
         public virtual User? User { get; set; }
-        public virtual List<Rating>? Ratings { get; set; } = [];
+        public virtual List<Rating> Ratings { get; set; } = [];
 
-        public virtual List<InvoiceItem>? InvoiceItems { get; set; } = [];
+        public virtual List<InvoiceItem> InvoiceItems { get; set; } = [];
 
     }
 }

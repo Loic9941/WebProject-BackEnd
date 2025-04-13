@@ -64,7 +64,7 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Customer")]
         [HttpPut("{id}/MarkAsPaid", Name = "MarkAsPaid")]
-        public ActionResult MarkAsPaid(int id, MarkAsPaidDTO markAsPaidDTO)
+        public ActionResult MarkAsPaid(int id, MarkInvoiceAsPaidDTO markAsPaidDTO)
         {
             try
             {

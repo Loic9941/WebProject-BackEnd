@@ -16,7 +16,7 @@ namespace Domain
         public Product? Product { get; set; } = null!;
 
         //to allow to delete a product
-        public required string Description;
+        public required string Name { get; set; }
 
         [Required]
         public required int UserId { get; set; }
@@ -30,7 +30,7 @@ namespace Domain
         // inPreparation, readyToBePickedUp ,pickedUp, inTransit, delivered
         public string Status { get; set; } = "inPreparation";
 
-        public DateTime? EstimatedDeliveryDate { get; set; }
+        public DateOnly? EstimatedDeliveryDate { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

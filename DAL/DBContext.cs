@@ -19,7 +19,6 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
 
             //Product
@@ -57,6 +56,9 @@ namespace DAL
                 .WithMany(p => p.Ratings)
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Rating>()
+                .HasIndex(r => new { r.ProductId, r.UserId })
+                .IsUnique();
 
             //User
             modelBuilder.Entity<User>()

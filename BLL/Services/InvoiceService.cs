@@ -61,7 +61,7 @@ namespace BLL.Services
             return _invoiceRepository.GetSingleOrDefault(x => x.UserId == userId && x.Status == "pending", "InvoiceItems");
         }
 
-        public void MarkAsPaid(int invoiceId, MarkAsPaidDTO markAsPaidDTO)
+        public void MarkAsPaid(int invoiceId, MarkInvoiceAsPaidDTO markAsPaidDTO)
         {
             Invoice invoiceToMarkAsPaid = _invoiceRepository.GetSingleOrDefault(
                 x => x.Id == invoiceId
@@ -97,7 +97,7 @@ namespace BLL.Services
                     ProductId = id,
                     UnitPrice = product.Price,
                     Quantity = 1,
-                    Description = product.Description,
+                    Name = product.Name,
                     UserId = product.UserId,
                 });
             }

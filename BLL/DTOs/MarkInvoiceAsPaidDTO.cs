@@ -2,7 +2,7 @@
 
 namespace BLL.DTOs
 {
-    public class MarkAsPaidDTO
+    public class MarkInvoiceAsPaidDTO
     {
         public int DeliveryPartnerId { get; set; }
     }

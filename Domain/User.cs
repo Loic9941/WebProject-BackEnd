@@ -20,15 +20,15 @@ namespace Domain
         [Required]
         public required string Lastname { get; set; }
 
-        public List<Rating>? Ratings { get; set; } = [];
+        public List<Rating> Ratings { get; set; } = [];
 
         //this one are the invoice linked to the customer
-        public List<Invoice>? Invoices { get; set; } = [];
+        public List<Invoice> Invoices { get; set; } = [];
 
         //this one are the invoice Items linked to the artist
-        public List<InvoiceItem>? InvoiceItems { get; set; } = [];
+        public List<InvoiceItem> InvoiceItems { get; set; } = [];
 
         //this one are the products linked to the artist
-        public List<Product>? Products { get; set; } = [];
+        public List<Product> Products { get; set; } = [];
     }
 }

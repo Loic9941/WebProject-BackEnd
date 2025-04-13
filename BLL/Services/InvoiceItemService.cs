@@ -31,5 +31,38 @@ namespace BLL.Services
                 throw new Exception("You are not authorized to delete this invoice item");
             }
         }
+
+        public IEnumerable<InvoiceItem> GetInvoiceItems()
+        {
+            var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
+            if (_authenticationService.IsArtisan())
+            {
+                return _invoiceItemRepository.Get(
+                    x => x.Product.UserId == userId, 
+                    q => q.OrderByDescending(i => i.CreatedAt), 
+                    "Invoice,Product"
+                );
+            }
+            if(_authenticationService.IsDeliveryPartner())
+            {
+                return _invoiceItemRepository.Get(
+                    x => x.Invoice.DeliveryPartnerId == userId,
+                    q => q.OrderByDescending(i => i.CreatedAt),
+                    "Invoice,Product"
+                );
+            }
+            if (_authenticationService.IsAdmin())
+            {
+                return _invoiceItemRepository.Get(
+                    null,
+                    q => q.OrderByDescending(i => i.CreatedAt),
+                    "Invoice,Product"
+                );
+            }
+            else
+            {
+                throw new Exception("You are not authorized to view this invoice item");
+            }
+        }
     }
 }

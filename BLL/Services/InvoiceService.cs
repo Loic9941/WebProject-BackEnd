@@ -39,13 +39,11 @@ namespace BLL.Services
             var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
             if (_authenticationService.IsCustomer())
             {
-                return _invoiceRepository.Get(x => x.UserId == _authenticationService.GetUserId(),null, "InvoiceItems");
+                return _invoiceRepository.Get(x => x.UserId == _authenticationService.GetUserId(), 
+                    q => q.OrderByDescending(i => i.CreatedAt), 
+                    "InvoiceItems"
+                );
             }
-            if (_authenticationService.IsDeliveryPartner())
-            {
-                return _invoiceRepository.Get(x => x.DeliveryPartnerId == _authenticationService.GetUserId(), null, "InvoiceItems");
-            }
-            //for admin : 
             return _invoiceRepository.Get();
         }
 

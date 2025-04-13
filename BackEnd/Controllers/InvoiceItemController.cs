@@ -1,4 +1,5 @@
 ﻿using BLL.IService;
+using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,7 @@ namespace Api.Controllers
             _invoiceItemService = invoiceItemService;
         }
 
-        [Authorize(Roles = "Customer,Administrator")]
+        [Authorize(Roles = "Customer, Administrator")]
         [HttpDelete("{id}", Name = "DeleteInvoiceItem")]
         public ActionResult DeleteInvoiceItem(int id)
         {
@@ -23,6 +24,21 @@ namespace Api.Controllers
             {
                 _invoiceItemService.Delete(id);
                 return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "DeliveryPartner, Administrator, Artisan")]
+        [HttpGet]
+        public ActionResult<IEnumerable<InvoiceItem>> GetInvoiceItems()
+        {
+            try
+            {
+                IEnumerable<InvoiceItem> listInvoiceItems = _invoiceItemService.GetInvoiceItems();
+                return Ok(listInvoiceItems);
             }
             catch (Exception e)
             {

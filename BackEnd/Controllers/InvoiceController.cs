@@ -32,6 +32,7 @@ namespace Api.Controllers
             }
         }
 
+        [Authorize(Roles = "Customer,Admin")]
         [HttpGet(Name = "GetInvoices")]
         public ActionResult<Invoice> GetInvoice()
         {

@@ -9,7 +9,7 @@ namespace Domain
         public int Id { get; set; }
         
         public int InvoiceId { get; set; }
-        public virtual Invoice? Invoice { get; set; } = null!;
+        public virtual Invoice Invoice { get; set; } = null!;
 
         public int ProductId { get; set; }
 
@@ -20,14 +20,14 @@ namespace Domain
 
         public int Quantity { get; set; }
 
-        // inPreparation ,pickedUp, inTransit, delivered
-        public string Status { get; set; } = null!;
+        // inPreparation, readyToBePickedUp ,pickedUp, inTransit, delivered
+        public string Status { get; set; } = "inPreparation";
 
         public DateTime? EstimatedDeliveryDate { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        public DateTime? InPreparationAt { get; set; }
+        public DateTime? ReadyToBePickedUp { get; set; }
 
         public DateTime? PickedUpAt { get; set; }
 

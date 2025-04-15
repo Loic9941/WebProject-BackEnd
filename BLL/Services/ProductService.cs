@@ -58,7 +58,7 @@ namespace BLL.Services
 
         public Product? GetById(int Id)
         {
-            return _productRepository.GetSingleOrDefault(x => x.Id == Id);
+            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "Ratings,Ratings.User");
         }
 
         public Product Update(int Id, Product product, IFormFile? image)

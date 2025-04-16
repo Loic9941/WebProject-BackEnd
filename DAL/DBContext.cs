@@ -12,6 +12,7 @@ namespace DAL
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Category> Categories { get; set; }
 
         public DBContext(DbContextOptions<DBContext> options) : base(options)
         {
@@ -43,6 +44,11 @@ namespace DAL
             modelBuilder.Entity<Product>()
                 .HasMany(p => p.InvoiceItems)
                 .WithOne(ii => ii.Product)
+                .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             //Rating
@@ -103,6 +109,13 @@ namespace DAL
             modelBuilder.Entity<InvoiceItem>()
                 .Property(p => p.UnitPrice)
                 .HasColumnType("money");
+
+            //Category
+            modelBuilder.Entity<Category>()
+                .HasMany(c => c.Products)
+                .WithOne(p => p.Category)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

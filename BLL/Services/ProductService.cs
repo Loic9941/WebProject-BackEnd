@@ -2,10 +2,8 @@
 using Domain;
 using DAL.Repository;
 using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using BLL.DTOs;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Errors;
 
 namespace BLL.Services
@@ -35,9 +33,17 @@ namespace BLL.Services
         {
             if (_authenticationService.IsArtisan())
             {
-                return _productRepository.Get(x => x.UserId == _authenticationService.GetUserId());
+                return _productRepository.Get(
+                    x => x.UserId == _authenticationService.GetUserId(),
+                    null,
+                    "Category"
+                    );
             }
-            return  _productRepository.Get();
+            return  _productRepository.Get(
+                null,
+                null,
+                "Category"
+                );
         }
 
         public Product Add(Product product, IFormFile? image)

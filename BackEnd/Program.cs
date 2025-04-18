@@ -43,7 +43,6 @@ builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 builder.Services.AddScoped<IGenericRepository<Invoice>, GenericRepository<Invoice>>();
 builder.Services.AddScoped<IGenericRepository<InvoiceItem>, GenericRepository<InvoiceItem>>();
 builder.Services.AddScoped<IGenericRepository<Rating>, GenericRepository<Rating>>();
-builder.Services.AddScoped<IGenericRepository<Category>, GenericRepository<Category>>();
 
 //services
 builder.Services.AddScoped<IProductService, ProductService>();
@@ -51,7 +50,6 @@ builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IInvoiceService, InvoiceService>();
 builder.Services.AddScoped<IInvoiceItemService, InvoiceItemService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

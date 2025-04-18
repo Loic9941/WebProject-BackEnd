@@ -33,6 +33,7 @@ namespace Domain
         public DateOnly? EstimatedDeliveryDate { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public virtual Rating? Rating { get; set; } = null;
 
         public DateTime? ReadyToBePickedUp { get; set; }
 

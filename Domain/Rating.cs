@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain
 {
@@ -7,9 +8,8 @@ namespace Domain
         [Key]
         public int Id { get; set; }
 
-        [Required]
-        public required int ProductId { get; set; }
-        public virtual Product? Product { get; set; } = null!;
+        public int? InvoiceItemId { get; set; } // Optional foreign key property
+        public virtual InvoiceItem? InvoiceItem { get; set; } = null!;
 
         public int Rate { get; set; }
 

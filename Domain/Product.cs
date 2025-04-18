@@ -19,13 +19,11 @@ namespace Domain
         [Required]
         public required int UserId { get; set; }
         public virtual User? User { get; set; }
-        public virtual List<Rating> Ratings { get; set; } = [];
 
         public virtual List<InvoiceItem> InvoiceItems { get; set; } = [];
 
-        public int? CategoryId { get; set; }
+        public required string Category { get; set; } = null!;
 
-        public virtual Category? Category { get; set; } = null!;
-
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

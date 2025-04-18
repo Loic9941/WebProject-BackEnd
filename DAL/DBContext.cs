@@ -12,7 +12,6 @@ namespace DAL
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Category> Categories { get; set; }
 
         public DBContext(DbContextOptions<DBContext> options) : base(options)
         {
@@ -23,16 +22,6 @@ namespace DAL
             base.OnModelCreating(modelBuilder);
 
             //Product
-            modelBuilder.Entity<Rating>()
-                .HasOne(r => r.Product)
-                .WithMany(p => p.Ratings)
-                .HasForeignKey(r => r.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.Ratings)
-                .WithOne(r => r.Product)
-                .HasForeignKey(r => r.ProductId)
-                .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.User)
                 .WithMany(c => c.Products)
@@ -45,11 +34,6 @@ namespace DAL
                 .HasMany(p => p.InvoiceItems)
                 .WithOne(ii => ii.Product)
                 .OnDelete(DeleteBehavior.SetNull);
-            modelBuilder.Entity<Product>()
-                .HasOne(p => p.Category)
-                .WithMany(c => c.Products)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.SetNull);
 
             //Rating
             modelBuilder.Entity<Rating>()
@@ -57,15 +41,14 @@ namespace DAL
                 .WithMany(c => c.Ratings)
                 .HasForeignKey(r => r.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
-            modelBuilder.Entity<Rating>()
-                .HasOne(r => r.Product)
-                .WithMany(p => p.Ratings)
-                .HasForeignKey(r => r.ProductId)
+            /*modelBuilder.Entity<Rating>()
+                .HasOne(r => r.InvoiceItem)
+                .WithOne(p => p.Rating)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Rating>()
-                .HasIndex(r => new { r.ProductId, r.UserId })
+                .HasIndex(r => new { r.InvoiceItem, r.UserId })
                 .IsUnique();
-
+            */
             //User
             modelBuilder.Entity<User>()
                 .HasMany(c => c.Ratings)
@@ -109,13 +92,10 @@ namespace DAL
             modelBuilder.Entity<InvoiceItem>()
                 .Property(p => p.UnitPrice)
                 .HasColumnType("money");
-
-            //Category
-            modelBuilder.Entity<Category>()
-                .HasMany(c => c.Products)
-                .WithOne(p => p.Category)
-                .HasForeignKey(p => p.CategoryId)
-                .OnDelete(DeleteBehavior.SetNull);
+            /*modelBuilder.Entity<InvoiceItem>()
+                .HasOne(p => p.Rating)
+                .WithOne(r => r.InvoiceItem)
+                .OnDelete(DeleteBehavior.Cascade);*/
         }
     }
 }

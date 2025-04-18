@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250418173621_simplify_category")]
+    partial class simplify_category
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,9 +130,6 @@ namespace DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -168,7 +168,7 @@ namespace DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("InvoiceItemId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Rate")
@@ -179,11 +179,10 @@ namespace DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InvoiceItemId")
-                        .IsUnique()
-                        .HasFilter("[InvoiceItemId] IS NOT NULL");
-
                     b.HasIndex("UserId");
+
+                    b.HasIndex("ProductId", "UserId")
+                        .IsUnique();
 
                     b.ToTable("Ratings");
                 });
@@ -281,9 +280,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.Rating", b =>
                 {
-                    b.HasOne("Domain.InvoiceItem", "InvoiceItem")
-                        .WithOne("Rating")
-                        .HasForeignKey("Domain.Rating", "InvoiceItemId");
+                    b.HasOne("Domain.Product", "Product")
+                        .WithMany("Ratings")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.User", "User")
                         .WithMany("Ratings")
@@ -291,7 +292,7 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("InvoiceItem");
+                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });
@@ -301,14 +302,11 @@ namespace DAL.Migrations
                     b.Navigation("InvoiceItems");
                 });
 
-            modelBuilder.Entity("Domain.InvoiceItem", b =>
-                {
-                    b.Navigation("Rating");
-                });
-
             modelBuilder.Entity("Domain.Product", b =>
                 {
                     b.Navigation("InvoiceItems");
+
+                    b.Navigation("Ratings");
                 });
 
             modelBuilder.Entity("Domain.User", b =>

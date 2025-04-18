@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250418211211_Move_rating_in_orderItem")]
+    partial class Move_rating_in_orderItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -168,9 +171,6 @@ namespace DAL.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("InvoiceItemId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Rate")
                         .HasColumnType("int");
 
@@ -178,10 +178,6 @@ namespace DAL.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("InvoiceItemId")
-                        .IsUnique()
-                        .HasFilter("[InvoiceItemId] IS NOT NULL");
 
                     b.HasIndex("UserId");
 
@@ -281,17 +277,11 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Domain.Rating", b =>
                 {
-                    b.HasOne("Domain.InvoiceItem", "InvoiceItem")
-                        .WithOne("Rating")
-                        .HasForeignKey("Domain.Rating", "InvoiceItemId");
-
                     b.HasOne("Domain.User", "User")
                         .WithMany("Ratings")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.Navigation("InvoiceItem");
 
                     b.Navigation("User");
                 });
@@ -299,11 +289,6 @@ namespace DAL.Migrations
             modelBuilder.Entity("Domain.Invoice", b =>
                 {
                     b.Navigation("InvoiceItems");
-                });
-
-            modelBuilder.Entity("Domain.InvoiceItem", b =>
-                {
-                    b.Navigation("Rating");
                 });
 
             modelBuilder.Entity("Domain.Product", b =>

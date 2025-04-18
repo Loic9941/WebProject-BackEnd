@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using BLL.DTOs;
 using Errors;
+using System.Linq.Expressions;
+using LinqKit;
 
 namespace BLL.Services
 {
@@ -29,21 +31,35 @@ namespace BLL.Services
             _ratingRepository = ratingRepository;
         }
 
-        public  IEnumerable<Product> Get()
+        public  IEnumerable<Product> Get(ProductFiltersDTO? productFiltersDTO)
         {
             if (_authenticationService.IsArtisan())
             {
                 return _productRepository.Get(
-                    x => x.UserId == _authenticationService.GetUserId(),
-                    null,
-                    "Category"
-                    );
+                    x => x.UserId == _authenticationService.GetUserId());
             }
-            return  _productRepository.Get(
-                null,
-                null,
-                "Category"
-                );
+            if (productFiltersDTO != null)
+            {
+                Expression<Func<Product, bool>>? filter = PredicateBuilder.New<Product>(true);
+                if (productFiltersDTO.Search is not null && productFiltersDTO.Search!= "")
+                {
+                    filter = filter.And(x => x.Name.Contains(productFiltersDTO.Search));
+                }
+                if (productFiltersDTO.Category is not null && productFiltersDTO.Category != "")
+                {
+                    filter = filter.And(x => x.Category == productFiltersDTO.Category);
+                }
+                if (productFiltersDTO.MinPrice != null)
+                {
+                    filter = filter.And(x => x.Price >= productFiltersDTO.MinPrice);
+                }
+                if (productFiltersDTO.MaxPrice != null && productFiltersDTO.MaxPrice != 0)
+                {
+                    filter = filter.And(x => x.Price <= productFiltersDTO.MaxPrice);
+                }
+                return _productRepository.Get(filter);
+            }
+            return _productRepository.Get();
         }
 
         public Product Add(Product product, IFormFile? image)
@@ -64,7 +80,7 @@ namespace BLL.Services
 
         public Product? GetById(int Id)
         {
-            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "Ratings,Ratings.User");
+            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "");
         }
 
         public Product Update(int Id, Product product, IFormFile? image)
@@ -82,6 +98,7 @@ namespace BLL.Services
             productToUpdate.Name = product.Name;
             productToUpdate.Description = product.Description;
             productToUpdate.Price = product.Price;
+            productToUpdate.Category = product.Category;
             if (image != null)
             {
                 using (var ms = new MemoryStream())
@@ -107,32 +124,21 @@ namespace BLL.Services
 
         public void RateProduct(int id, RateProductDTO rateProductDTO)
         {
-            Product? product = this.GetById(id) ?? throw new Exception("Product not found");
-            IEnumerable<InvoiceItem> invoiceItem = _invoiceItemRepository.Get(
-                x => x.ProductId == id && 
-                x.Invoice.UserId == _authenticationService.GetUserId()
-            );
-            if (invoiceItem.Count() == 0)
+            InvoiceItem? invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id) ??
+                throw new Exception("InvoiceItem not found");
+            invoiceItem.Rating = new Rating
             {
-                throw new Exception("You must have purchased this product to rate it");
-            }
-            //check if there is already a rating for this user and this product
-            _ratingRepository.GetSingleOrDefault(
-                x => x.ProductId == id &&
-                x.UserId == _authenticationService.GetUserId()
-            );
-            if (product.Ratings.Any(x => x.UserId == _authenticationService.GetUserId()))
-            {
-                throw new RatingConflict();
-            }
-            product.Ratings.Add(new Rating
-            {
-                ProductId = id,
                 UserId = _authenticationService.GetUserId() ?? throw new Exception("User not found"),
                 Rate = rateProductDTO.Rate,
                 Comment = rateProductDTO.Comment,
-            });
-            _productRepository.Update(product);
+                InvoiceItemId = id
+            };
+            _invoiceItemRepository.Update(invoiceItem);
+        }
+
+        public IEnumerable<string> GetCategories()
+        {
+            return _productRepository.Get().Select(x => x.Category).Distinct();
         }
     }
 }

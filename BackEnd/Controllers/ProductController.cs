@@ -1,6 +1,5 @@
 ﻿using BLL.DTOs;
 using BLL.IService;
-using BLL.Services;
 using Domain;
 using Errors;
 using Microsoft.AspNetCore.Authorization;
@@ -23,34 +22,34 @@ namespace API.Controllers
 
         
         [HttpGet(Name = "GetProducts")]
-        public IEnumerable<Product> GetProducts()
+        public ActionResult<IEnumerable<Product>> GetProducts(ProductFiltersDTO? productFiltersDTO)
         {
-            return _productService.Get();
+            return Ok(_productService.Get(productFiltersDTO));
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
-        public Product GetProduct(int id)
+        public ActionResult<Product> GetProduct(int id)
         {
             Product? product = _productService.GetById(id);
             if (product == null)
             {
-                throw new Exception("Product not found");
+                return BadRequest();
             }
-            return product;
+            return Ok(product);
         }
 
         [Authorize(Roles = "Artisan")]
         [HttpPost(Name = "AddProduct")]
-        public  Product AddProduct([FromForm] Product product, IFormFile? image)
+        public ActionResult<Product> AddProduct([FromForm] Product product, IFormFile? image)
         {
-            return  _productService.Add(product, image);
+            return  Ok(_productService.Add(product, image));
         }
 
         [Authorize(Roles = "Artisan,Administrator")]
         [HttpPut("{id}", Name = "UpdateProduct")]
-        public Product PutProduct(int Id, [FromForm] Product product, IFormFile? image)
+        public ActionResult<Product> PutProduct(int Id, [FromForm] Product product, IFormFile? image)
         {
-            return _productService.Update(Id, product, image);
+            return Ok(_productService.Update(Id, product, image));
         }
 
         [Authorize(Roles = "Artisan,Administrator")]
@@ -68,7 +67,7 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer")]
+        [Authorize(Roles = "Customer,Administrator")]
         [HttpPost("{id}/rate/", Name = "RateProduct")]
         public ActionResult RateProduct(int id, RateProductDTO rateProductDTO)
         {
@@ -87,9 +86,12 @@ namespace API.Controllers
             }
         }
 
-
-
-
-
+        [Authorize(Roles = "Customer,Administrator,Artisan")]
+        [HttpGet("GetCategories",Name = "GetCategories")]
+        public ActionResult<IEnumerable<string>> GetCategories()
+        {
+            IEnumerable<string> listCategories = _productService.GetCategories();
+            return Ok(listCategories);
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using BLL.IService;
-using BLL.Services;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,9 +20,9 @@ namespace Api.Controllers
 
         [HttpGet(Name = "GetUsers")]
         [Authorize(Roles= "Administrator")]
-        public IEnumerable<User> GetUsers()
+        public ActionResult<IEnumerable<User>> GetUsers()
         {
-            return _userService.GetUsers();
+            return Ok(_userService.GetUsers());
         }
 
         [HttpDelete("{id}", Name = "DeleteUser")]

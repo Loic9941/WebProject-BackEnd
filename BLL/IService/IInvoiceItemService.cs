@@ -15,5 +15,7 @@ namespace BLL.IService
         public InvoiceItem? MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO);
         public InvoiceItem? MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO);
         public InvoiceItem? MarkAsDelivered(int id);
+
+        public void Rate(int id, RateProductDTO rateProductDTO);
     }
 }

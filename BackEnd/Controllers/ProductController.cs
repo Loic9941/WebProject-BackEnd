@@ -67,25 +67,6 @@ namespace API.Controllers
             }
         }
 
-        [Authorize(Roles = "Customer,Administrator")]
-        [HttpPost("{id}/rate/", Name = "RateProduct")]
-        public ActionResult RateProduct(int id, RateProductDTO rateProductDTO)
-        {
-            try
-            {
-                _productService.RateProduct(id, rateProductDTO);
-                return Ok();
-            }
-            catch (RatingConflict e )
-            {
-                return Conflict(e.Message);
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [Authorize(Roles = "Customer,Administrator,Artisan")]
         [HttpGet("GetCategories",Name = "GetCategories")]
         public ActionResult<IEnumerable<string>> GetCategories()

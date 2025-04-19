@@ -80,7 +80,7 @@ namespace BLL.Services
 
         public Product? GetById(int Id)
         {
-            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "");
+            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "InvoiceItems,InvoiceItems.Rating,InvoiceItems.Rating.User");
         }
 
         public Product Update(int Id, Product product, IFormFile? image)
@@ -120,20 +120,6 @@ namespace BLL.Services
                 throw new Exception("You are not authorized to delete this product");
             }
             _productRepository.Delete(product);
-        }
-
-        public void RateProduct(int id, RateProductDTO rateProductDTO)
-        {
-            InvoiceItem? invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id) ??
-                throw new Exception("InvoiceItem not found");
-            invoiceItem.Rating = new Rating
-            {
-                UserId = _authenticationService.GetUserId() ?? throw new Exception("User not found"),
-                Rate = rateProductDTO.Rate,
-                Comment = rateProductDTO.Comment,
-                InvoiceItemId = id
-            };
-            _invoiceItemRepository.Update(invoiceItem);
         }
 
         public IEnumerable<string> GetCategories()

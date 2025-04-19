@@ -20,8 +20,6 @@ namespace Domain
         [Required]
         public required string Lastname { get; set; }
 
-        public List<Rating> Ratings { get; set; } = [];
-
         //this one are the invoice linked to the customer
         public List<Invoice> Invoices { get; set; } = [];
 

@@ -36,11 +36,7 @@ namespace DAL
                 .OnDelete(DeleteBehavior.SetNull);
 
             //Rating
-            modelBuilder.Entity<Rating>()
-                .HasOne(r => r.User)
-                .WithMany(c => c.Ratings)
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+          
             /*modelBuilder.Entity<Rating>()
                 .HasOne(r => r.InvoiceItem)
                 .WithOne(p => p.Rating)
@@ -49,12 +45,6 @@ namespace DAL
                 .HasIndex(r => new { r.InvoiceItem, r.UserId })
                 .IsUnique();
             */
-            //User
-            modelBuilder.Entity<User>()
-                .HasMany(c => c.Ratings)
-                .WithOne(r => r.User)
-                .HasForeignKey(r => r.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<User>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.User)

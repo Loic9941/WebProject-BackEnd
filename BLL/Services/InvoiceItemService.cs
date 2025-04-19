@@ -2,6 +2,7 @@
 using BLL.IService;
 using DAL.Repository;
 using Domain;
+using Errors;
 
 namespace BLL.Services
 {
@@ -138,6 +139,23 @@ namespace BLL.Services
             invoiceItem.DeliveredAt = DateTime.Now;
             _invoiceItemRepository.Update(invoiceItem);
             return invoiceItem;
+        }
+
+        public void Rate(int id, RateProductDTO rateProductDTO)
+        {
+            InvoiceItem? invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id,"Rating") ??
+                throw new Exception("InvoiceItem not found");
+            if (invoiceItem.Rating is not null)
+            {
+                throw new RatingConflict();
+            }
+            invoiceItem.Rating = new Rating
+            {
+                Rate = rateProductDTO.Rate,
+                Text = rateProductDTO.Text,
+                InvoiceItemId = id
+            };
+            _invoiceItemRepository.Update(invoiceItem);
         }
     }
 }

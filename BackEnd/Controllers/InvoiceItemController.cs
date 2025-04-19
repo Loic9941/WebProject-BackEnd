@@ -1,6 +1,7 @@
 ﻿using BLL.DTOs;
 using BLL.IService;
 using Domain;
+using Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,7 +48,7 @@ namespace Api.Controllers
             }
         }
 
-        [Authorize(Roles = "Admin, DeliveryPartner, Artisan")]
+        [Authorize]
         [HttpGet("{id}", Name = "GetInvoiceItem")]
         public ActionResult GetInvoiceItem(int id) 
         {
@@ -129,5 +130,26 @@ namespace Api.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [Authorize(Roles = "Customer,Administrator")]
+        [HttpPost("{id}/rate/", Name = "RateInvoiceItem")]
+        public ActionResult RateInvoiceItem(int id, RateProductDTO rateProductDTO)
+        {
+            try
+            {
+                _invoiceItemService.Rate(id, rateProductDTO);
+                return Ok();
+            }
+            catch (RatingConflict e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
     }
 }

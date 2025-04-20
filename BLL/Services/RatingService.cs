@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using BLL.DTOs.InputDTOs;
 using BLL.IService;
 using DAL.Repository;
 using Domain;
@@ -33,7 +34,7 @@ namespace BLL.Services
                 return _ratingRepository.Get(
                     filter,
                     null,
-                    "InvoiceItem,InvoiceItem.User"
+                    "InvoiceItem,InvoiceItem.User,Comment"
                 );
             }
             else if (_authenticationService.IsCustomer())
@@ -41,14 +42,41 @@ namespace BLL.Services
                 return _ratingRepository.Get(
                     filter,
                     null,
-                    "InvoiceItem,InvoiceItem.User"
+                    "InvoiceItem,InvoiceItem.User,Comment"
                 );
             }
             else
             {
                 throw new Exception("You are not authorized to access this rating");
             }
+        }
 
+        public Rating? GetRating(int id)
+        {
+            return _ratingRepository.GetSingleOrDefault(
+                x => x.Id == id,
+                "InvoiceItem,InvoiceItem.User,Comment"
+            );
+        }
+
+        public void AddComment(int id, CommentDTO commentDTO)
+        {
+            var rating = _ratingRepository.GetSingleOrDefault(
+                x => x.Id == id
+            ) ?? throw new Exception("Rating not found");
+            if (_authenticationService.IsArtisan())
+            {
+                rating.Comment = new Comment
+                {
+                    Text = commentDTO.Text,
+                    RatingId = rating.Id,
+                };
+                _ratingRepository.Update(rating);
+            }
+            else
+            {
+                throw new Exception("You are not authorized to add a comment to this rating");
+            }
         }
     }
 }

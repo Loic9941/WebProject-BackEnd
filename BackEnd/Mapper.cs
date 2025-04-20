@@ -15,10 +15,12 @@ namespace Api
                 Rate = rating.Rate,
                 Text = rating.Text,
                 CreatedAt = rating.CreatedAt,
-                Comment = rating.Comment?.MapToDTO(),
                 FirstName = rating.InvoiceItem.User?.Firstname ?? "",
                 LastName = rating.InvoiceItem.User?.Lastname ?? "",
                 ProductName = rating.InvoiceItem.Name,
+                CommentId = rating.Comment?.Id,
+                CommentText = rating.Comment?.Text,
+                CommentCreatedAt = rating.Comment?.CreatedAt
             };
         }
 

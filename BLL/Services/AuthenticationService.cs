@@ -40,9 +40,9 @@ namespace BLL.Services
 
             var claims = new[] {
                 new Claim(JwtRegisteredClaimNames.Sub, username),
-                new Claim("custom_info", "info"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(ClaimTypes.Role, _userRepository.GetSingleOrDefault(x => x.Email == username).Role)
+                new Claim(ClaimTypes.Role, _userRepository.GetSingleOrDefault(x => x.Email == username).Role),
+                new Claim(ClaimTypes.NameIdentifier, _userRepository.GetSingleOrDefault(x => x.Email == username)?.Id.ToString())
             };
 
             var jwtIssuer = _config["Jwt:Issuer"];

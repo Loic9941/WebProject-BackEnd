@@ -17,6 +17,11 @@ namespace BLL.DTOs.OutputDTOs
 
         public required DateTime CreatedAt { get; set; }
 
-        public CommentOutputDTO? Comment { get; set; } = null!;
+        public required int? CommentId { get; set; }
+
+        public required string? CommentText { get; set; }
+
+        public required DateTime? CommentCreatedAt { get; set; }
+
     }
 }

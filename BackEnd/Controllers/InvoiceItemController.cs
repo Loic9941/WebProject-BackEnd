@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/invoiceItems")]
     [ApiController]
     public class InvoiceItemController : ControllerBase
     {

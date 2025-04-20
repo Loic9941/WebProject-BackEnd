@@ -1,4 +1,5 @@
-﻿using BLL.DTOs.OutputDTOs;
+﻿using BLL.DTOs.InputDTOs;
+using BLL.DTOs.OutputDTOs;
 using BLL.IService;
 using BLL.Services;
 using Errors;
@@ -30,6 +31,42 @@ namespace Api.Controllers
             try
             {
                 return Ok(_ratingService.GetRatings(productId).Select(x => x.MapToDTO()));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Artisan")]
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult<RatingOutputDTO> GetRating(int id)
+        {
+            try
+            {
+                RatingOutputDTO? rating = _ratingService.GetRating(id)?.MapToDTO();
+                if (rating == null)
+                {
+                    return NotFound();
+                }
+                return Ok(rating);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Artisan")]
+        [HttpPost]
+        [Route("{id}/comment")]
+        public ActionResult<RatingOutputDTO> AddComment(int id, CommentDTO commentDTO)
+        {
+            try
+            {
+                _ratingService.AddComment(id, commentDTO);
+                return NoContent();
             }
             catch (Exception e)
             {

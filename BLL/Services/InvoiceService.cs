@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.InputDTOs;
 using BLL.IService;
 using DAL.Repository;
 using Domain;
@@ -98,7 +98,7 @@ namespace BLL.Services
                     UnitPrice = product.Price,
                     Quantity = 1,
                     Name = product.Name,
-                    UserId = product.UserId,
+                    UserId = userId,
                 });
             }
             else

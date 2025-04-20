@@ -1,4 +1,5 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.InputDTOs;
+using BLL.DTOs.OutputDTOs;
 using BLL.IService;
 using Domain;
 using Errors;
@@ -25,7 +26,7 @@ namespace Api.Controllers
             try
             {
                 _invoiceItemService.Delete(id);
-                return Ok();
+                return NoContent();
             }
             catch (Exception e)
             {
@@ -35,12 +36,12 @@ namespace Api.Controllers
 
         [Authorize(Roles = "DeliveryPartner, Administrator, Artisan")]
         [HttpGet]
-        public ActionResult<IEnumerable<InvoiceItem>> GetInvoiceItems()
+        public ActionResult<IEnumerable<InvoiceItemOutputDTO>> GetInvoiceItems()
         {
             try
             {
                 IEnumerable<InvoiceItem> listInvoiceItems = _invoiceItemService.GetInvoiceItems();
-                return Ok(listInvoiceItems);
+                return Ok(listInvoiceItems.Select(x => x.MapToDTO()));
             }
             catch (Exception e)
             {
@@ -50,7 +51,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpGet("{id}", Name = "GetInvoiceItem")]
-        public ActionResult GetInvoiceItem(int id) 
+        public ActionResult<InvoiceItemOutputDTO> GetInvoiceItem(int id) 
         {
             try
             {
@@ -59,7 +60,7 @@ namespace Api.Controllers
                 {
                     return NotFound();
                 }
-                return Ok(invoiceItem);
+                return Ok(invoiceItem.MapToDTO());
             }
             catch (Exception e)
             {
@@ -69,13 +70,12 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Admin, Artisan")]
         [HttpPut("{id}/markAsReadyToBeShipped", Name = "MarkAsReadyToBeShipped")]
-        public ActionResult MarkAsReadyToBeShipped(int id)
+        public ActionResult<InvoiceItemOutputDTO> MarkAsReadyToBeShipped(int id)
         {
             try
             {
-
                 var invoiceItem = _invoiceItemService.MarkAsReadyToBeShipped(id);
-                return Ok(invoiceItem);
+                return Ok(invoiceItem.MapToDTO());
             }
             catch (Exception e)
             {
@@ -85,13 +85,12 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Admin, DeliveryPartner")]
         [HttpPut("{id}/markAsPickedUp", Name = "MarkAsPickedUp")]
-        public ActionResult MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
+        public ActionResult<InvoiceItemOutputDTO> MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
         {
             try
             {
-
                 var invoiceItem = _invoiceItemService.MarkAsPickedUp(id, markInvoiceItemAsDTO);
-                return Ok(invoiceItem);
+                return Ok(invoiceItem.MapToDTO());
             }
             catch (Exception e)
             {
@@ -101,13 +100,13 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Admin, DeliveryPartner")]
         [HttpPut("{id}/markAsInTransit", Name = "MarkAsInTransit")]
-        public ActionResult MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
+        public ActionResult<InvoiceItemOutputDTO> MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
         {
             try
             {
 
                 var invoiceItem = _invoiceItemService.MarkAsInTransit(id, markInvoiceItemAsDTO);
-                return Ok(invoiceItem);
+                return Ok(invoiceItem.MapToDTO());
             }
             catch (Exception e)
             {
@@ -117,13 +116,12 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Admin, DeliveryPartner")]
         [HttpPut("{id}/markAsDelivered", Name = "markAsDelivered")]
-        public ActionResult MarkAsDelivered(int id)
+        public ActionResult<InvoiceItemOutputDTO> MarkAsDelivered(int id)
         {
             try
             {
-
                 var invoiceItem = _invoiceItemService.MarkAsDelivered(id);
-                return Ok(invoiceItem);
+                return Ok(invoiceItem.MapToDTO());
             }
             catch (Exception e)
             {
@@ -138,7 +136,7 @@ namespace Api.Controllers
             try
             {
                 _invoiceItemService.Rate(id, rateProductDTO);
-                return Ok();
+                return NoContent();
             }
             catch (RatingConflict e)
             {

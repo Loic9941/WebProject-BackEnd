@@ -1,4 +1,5 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.InputDTOs;
+using BLL.DTOs.OutputDTOs;
 using BLL.IService;
 using Domain;
 using Microsoft.AspNetCore.Authorization;
@@ -19,12 +20,12 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Customer")]
         [HttpPost("AddToInvoice/{productId}", Name = "AddToShoppingCart")]
-        public ActionResult<Invoice> AddToShoppingCart(int productId)
+        public ActionResult<InvoiceOutputDTO> AddToShoppingCart(int productId)
         {
             try
             {
                 Invoice invoice = _invoiceService.AddToInvoice(productId);
-                return Ok(invoice);
+                return Ok(invoice.MapToDTO());
             }
             catch (Exception e)
             {
@@ -34,12 +35,12 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Customer,Admin")]
         [HttpGet(Name = "GetInvoices")]
-        public ActionResult<Invoice> GetInvoice()
+        public ActionResult<IEnumerable<InvoiceOutputDTO>> GetInvoice()
         {
             try
             {
                 IEnumerable<Invoice> invoices = _invoiceService.Get();
-                return Ok(invoices);
+                return Ok(invoices.Select(x => x.MapToDTO()));
             }
             catch (Exception e)
             {
@@ -49,12 +50,16 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Customer")]
         [HttpGet("GetPendingInvoice", Name = "GetPendingInvoice")]
-        public ActionResult<Invoice> GetPendingInvoice()
+        public ActionResult<InvoiceOutputDTO> GetPendingInvoice()
         {
             try
             {
                 Invoice? invoice = _invoiceService.GetPendingInvoice();
-                return Ok(invoice);
+                if (invoice is null)
+                {
+                    return Ok(null);
+                }
+                return Ok(invoice.MapToDTO());
             }
             catch (Exception e)
             {
@@ -79,7 +84,7 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Admin, Customer")]
         [HttpGet("{id}", Name = "GetInvoice")]
-        public ActionResult<Invoice> GetInvoice(int id)
+        public ActionResult<InvoiceOutputDTO> GetInvoice(int id)
         {
             try
             {
@@ -88,7 +93,7 @@ namespace Api.Controllers
                 {
                     throw new Exception("Invoice not found");
                 }
-                return Ok(invoice);
+                return Ok(invoice.MapToDTO());
             }
             catch (Exception e)
             {

@@ -4,6 +4,6 @@ namespace BLL.IService
 {
     public interface IRatingService
     {
-        public IEnumerable<Rating> GetRatings();
+        public IEnumerable<Rating> GetRatings(int? ProductId);
     }
 }

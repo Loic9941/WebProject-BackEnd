@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace BLL.DTOs
+namespace BLL.DTOs.InputDTOs
 {
     public class MarkInvoiceAsPaidDTO
     {

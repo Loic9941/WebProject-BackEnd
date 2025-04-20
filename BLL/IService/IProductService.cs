@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.InputDTOs;
 using Domain;
 using Microsoft.AspNetCore.Http;
 

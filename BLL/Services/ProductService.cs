@@ -3,10 +3,10 @@ using Domain;
 using DAL.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using BLL.DTOs;
 using Errors;
 using System.Linq.Expressions;
 using LinqKit;
+using BLL.DTOs.InputDTOs;
 
 namespace BLL.Services
 {
@@ -80,7 +80,7 @@ namespace BLL.Services
 
         public Product? GetById(int Id)
         {
-            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "InvoiceItems,InvoiceItems.Rating,InvoiceItems.Rating.User");
+            return _productRepository.GetSingleOrDefault(x => x.Id == Id);
         }
 
         public Product Update(int Id, Product product, IFormFile? image)

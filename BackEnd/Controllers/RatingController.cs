@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.OutputDTOs;
 using BLL.IService;
 using BLL.Services;
 using Errors;
@@ -9,7 +9,7 @@ namespace Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api")]
+    [Route("api/ratings")]
 
     public class RatingController : ControllerBase
     {
@@ -22,15 +22,14 @@ namespace Api.Controllers
             _ratingService = ratingService;
         }
 
-        [Authorize(Roles = "Artisan")]
+        [Authorize(Roles = "Artisan,Customer")]
         [HttpGet]
-        [Route("ratings")]
-        public ActionResult GetRatings()
+        [Route("")]
+        public ActionResult<IEnumerable<RatingOutputDTO>> GetRatings([FromQuery] int? productId)
         {
             try
             {
-                var ratings = _ratingService.GetRatings();
-                return Ok(ratings);
+                return Ok(_ratingService.GetRatings(productId).Select(x => x.MapToDTO()));
             }
             catch (Exception e)
             {

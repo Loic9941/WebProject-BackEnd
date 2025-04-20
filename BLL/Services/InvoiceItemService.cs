@@ -1,4 +1,4 @@
-﻿using BLL.DTOs;
+﻿using BLL.DTOs.InputDTOs;
 using BLL.IService;
 using DAL.Repository;
 using Domain;
@@ -47,7 +47,7 @@ namespace BLL.Services
             if (_authenticationService.IsArtisan())
             {
                 return _invoiceItemRepository.Get(
-                    x => x.UserId == userId,
+                    x => x.Product.UserId == userId,
                     q => q.OrderByDescending(i => i.CreatedAt),
                     "Invoice,Product"
                 );
@@ -81,7 +81,7 @@ namespace BLL.Services
             }
         }
 
-        public InvoiceItem? MarkAsReadyToBeShipped(int id)
+        public InvoiceItem MarkAsReadyToBeShipped(int id)
         {
             var invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Invoice item not found");
             if (invoiceItem.Status != "inPreparation")
@@ -94,7 +94,7 @@ namespace BLL.Services
             return invoiceItem;
         }
 
-        public InvoiceItem? MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
+        public InvoiceItem MarkAsPickedUp(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
         {
             var invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Invoice item not found");
             if (invoiceItem.Status != "readyToBePickedUp")
@@ -111,7 +111,7 @@ namespace BLL.Services
             return invoiceItem;
         }
 
-        public InvoiceItem? MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
+        public InvoiceItem MarkAsInTransit(int id, MarkInvoiceItemAsDTO markInvoiceItemAsDTO)
         {
             var invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Invoice item not found");
             if (invoiceItem.Status != "pickedUp")
@@ -128,7 +128,7 @@ namespace BLL.Services
             return invoiceItem;
         }
 
-        public InvoiceItem? MarkAsDelivered(int id)
+        public InvoiceItem MarkAsDelivered(int id)
         {
             var invoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Invoice item not found");
             if (invoiceItem.Status != "inTransit")

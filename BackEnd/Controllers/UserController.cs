@@ -1,5 +1,5 @@
-﻿using BLL.IService;
-using Domain;
+﻿using BLL.DTOs.OutputDTOs;
+using BLL.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,12 +17,11 @@ namespace Api.Controllers
             _userService = userService;
         }
 
-
         [HttpGet(Name = "GetUsers")]
         [Authorize(Roles= "Administrator")]
-        public ActionResult<IEnumerable<User>> GetUsers()
+        public ActionResult<IEnumerable<UserOutputDTO>> GetUsers()
         {
-            return Ok(_userService.GetUsers());
+            return Ok(_userService.GetUsers().Select(x => x.MapToDTO()));
         }
 
         [HttpDelete("{id}", Name = "DeleteUser")]
@@ -41,9 +40,9 @@ namespace Api.Controllers
 
         [HttpGet("GetDeliveryPartners", Name = "GetDeliveryPartners")]
         [Authorize(Roles = "Customer")]
-        public ActionResult<IEnumerable<User>> GetDeliveryPartners()
+        public ActionResult<IEnumerable<UserOutputDTO>> GetDeliveryPartners()
         {
-            return Ok(_userService.GetDeliveryPartners());
+            return Ok(_userService.GetDeliveryPartners().Select(x => x.MapToDTO()));
         }
     }
 }

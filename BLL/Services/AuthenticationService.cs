@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using BLL.DTOs;
+using BLL.DTOs.InputDTOs;
 using BLL.IService;
 using DAL.Repository;
 using Domain;

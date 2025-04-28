@@ -57,7 +57,34 @@ namespace BLL.Services
                 {
                     filter = filter.And(x => x.Price <= productFiltersDTO.MaxPrice);
                 }
-                return _productRepository.Get(filter);
+
+                Func<IQueryable<Product>, IOrderedQueryable<Product>>? OrderBy = null;
+                if(productFiltersDTO.OrderBy is not null)
+                {
+                    switch (productFiltersDTO.OrderBy)
+                    {
+                        case "name":
+                            OrderBy = q => q.OrderBy(x => x.Name);
+                            break;
+                        case "nameDesc":
+                            OrderBy = q => q.OrderByDescending(x => x.Name);
+                            break;
+                        case "price":
+                            OrderBy = q => q.OrderBy(x => x.Price);
+                            break;
+                        case "priceDesc":
+                            OrderBy = q => q.OrderByDescending(x => x.Price);
+                            break;
+                        case "createdAt":
+                            OrderBy = q => q.OrderBy(x => x.CreatedAt);
+                            break;
+                        case "createdAtDesc":
+                            OrderBy = q => q.OrderByDescending(x => x.CreatedAt);
+                            break;
+                    }
+                }
+
+                return _productRepository.Get(filter, OrderBy);
             }
             return _productRepository.Get();
         }

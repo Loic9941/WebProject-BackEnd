@@ -3,10 +3,10 @@ using Domain;
 using DAL.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using Errors;
 using System.Linq.Expressions;
 using LinqKit;
 using BLL.DTOs.InputDTOs;
+using BLL.DTOs.OutputDTOs;
 
 namespace BLL.Services
 {
@@ -17,18 +17,21 @@ namespace BLL.Services
         private readonly IAuthenticationService _authenticationService;
         private readonly IGenericRepository<InvoiceItem> _invoiceItemRepository;
         private readonly IGenericRepository<Rating> _ratingRepository;
+        private readonly IGenericRepository<Invoice> _invoiceRepository;
 
         public ProductService(
             IGenericRepository<Product> productRepository, 
             IAuthenticationService authenticationService,
             IGenericRepository<InvoiceItem> invoiceItemRepository,
-            IGenericRepository<Rating> ratingRepository
+            IGenericRepository<Rating> ratingRepository,
+            IGenericRepository<Invoice> invoiceRepository
             )
         {
             _productRepository = productRepository;
             _authenticationService = authenticationService;
             _invoiceItemRepository = invoiceItemRepository;
             _ratingRepository = ratingRepository;
+            _invoiceRepository = invoiceRepository;
         }
 
         public  IEnumerable<Product> Get(ProductFiltersDTO? productFiltersDTO)
@@ -152,6 +155,44 @@ namespace BLL.Services
         public IEnumerable<string> GetCategories()
         {
             return _productRepository.Get().Select(x => x.Category).Distinct();
+        }
+
+        public void AddToInvoice(int id)
+        {
+            int invoiceId = 0;
+
+            Product? product = this._productRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Product not found");
+            var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
+            Invoice? invoice = _invoiceRepository.GetSingleOrDefault(x => x.Status == "Pending" && x.UserId == userId);
+            if (invoice == null)
+            {
+                invoice = new Invoice { UserId = userId, Status = "pending", CreatedAt = DateTime.Now };
+                invoiceId = _invoiceRepository.Add(invoice);
+            }
+            else
+            {
+                invoiceId = invoice.Id;
+            }
+            //check if there is already an invoice item with the same product
+            var existingInvoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.InvoiceId == invoiceId && x.ProductId == id);
+            if (existingInvoiceItem == null)
+            {
+                _invoiceItemRepository.Add(new InvoiceItem
+                {
+                    InvoiceId = invoiceId,
+                    ProductId = id,
+                    UnitPrice = product.Price,
+                    Quantity = 1,
+                    Name = product.Name,
+                    UserId = userId,
+                });
+            }
+            else
+            {
+                existingInvoiceItem.UnitPrice = product.Price; // to be sure to have the last price
+                existingInvoiceItem.Quantity += 1;
+                _invoiceItemRepository.Update(existingInvoiceItem);
+            }
         }
     }
 }

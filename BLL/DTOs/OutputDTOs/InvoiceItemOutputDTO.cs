@@ -33,5 +33,7 @@ namespace BLL.DTOs.OutputDTOs
         public required DateTime? InTransitAt { get; set; }
 
         public required DateTime? DeliveredAt { get; set; }
+
+        public RatingOutputDTO? Rating { get; set; } = null!;
     }
 }

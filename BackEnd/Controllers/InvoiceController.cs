@@ -18,24 +18,9 @@ namespace Api.Controllers
             _invoiceService = invoiceService;
         }
 
-        [Authorize(Roles = "Customer")]
-        [HttpPost("AddToInvoice/{productId}", Name = "AddToShoppingCart")]
-        public ActionResult<InvoiceOutputDTO> AddToShoppingCart(int productId)
-        {
-            try
-            {
-                Invoice invoice = _invoiceService.AddToInvoice(productId);
-                return Ok(invoice.MapToDTO());
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [Authorize(Roles = "Customer,Admin")]
         [HttpGet(Name = "GetInvoices")]
-        public ActionResult<IEnumerable<InvoiceOutputDTO>> GetInvoice()
+        public ActionResult<IEnumerable<InvoiceOutputDTO>> GetInvoices()
         {
             try
             {

@@ -59,19 +59,27 @@ namespace BLL.Services
             );
         }
 
-        public void AddComment(int id, CommentDTO commentDTO)
+        public void SaveComment(int id, int? commentId, CommentDTO commentDTO)
         {
             var rating = _ratingRepository.GetSingleOrDefault(
                 x => x.Id == id
             ) ?? throw new Exception("Rating not found");
             if (_authenticationService.IsArtisan())
             {
-                rating.Comment = new Comment
+                if (commentId is null)
                 {
-                    Text = commentDTO.Text,
-                    RatingId = rating.Id,
-                };
-                _ratingRepository.Update(rating);
+                    rating.Comment = new Comment
+                    {
+                        Text = commentDTO.Text,
+                        RatingId = rating.Id,
+                    };
+                    _ratingRepository.Update(rating);
+                }
+                else
+                {
+                    rating.Comment.Text = commentDTO.Text;
+                }
+                
             }
             else
             {

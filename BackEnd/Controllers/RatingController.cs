@@ -1,8 +1,6 @@
 ﻿using BLL.DTOs.InputDTOs;
 using BLL.DTOs.OutputDTOs;
 using BLL.IService;
-using BLL.Services;
-using Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -65,7 +63,23 @@ namespace Api.Controllers
         {
             try
             {
-                _ratingService.AddComment(id, commentDTO);
+                _ratingService.SaveComment(id, null, commentDTO);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [Authorize(Roles = "Artisan")]
+        [HttpPost]
+        [Route("{id}/comment/{commentId}")]
+        public ActionResult<RatingOutputDTO> UpdateComment(int id, int commentId, CommentDTO commentDTO)
+        {
+            try
+            {
+                _ratingService.SaveComment(id, commentId, commentDTO);
                 return NoContent();
             }
             catch (Exception e)

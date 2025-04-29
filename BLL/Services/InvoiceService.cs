@@ -29,8 +29,8 @@ namespace BLL.Services
         public Invoice? GetById(int id)
         {  
             var invoice = _invoiceRepository.GetSingleOrDefault(
-                x => x.Id == id, 
-                "InvoiceItems,InvoiceItems.Product,DeliveryPartner"
+                x => x.Id == id,
+                "InvoiceItems,InvoiceItems.Product,InvoiceItems.Rating,DeliveryPartner"
                 );
             if(
                 !_authenticationService.IsAdmin() && 
@@ -70,44 +70,6 @@ namespace BLL.Services
             invoiceToMarkAsPaid.DeliveryPartnerId = markAsPaidDTO.DeliveryPartnerId;
             invoiceToMarkAsPaid.PaidAt = DateTime.Now;
             _invoiceRepository.Update(invoiceToMarkAsPaid);
-        }
-
-        public Invoice AddToInvoice(int id)
-        {
-            int invoiceId = 0;
-
-            Product? product = this._productRepository.GetSingleOrDefault(x => x.Id == id) ?? throw new Exception("Product not found");
-            var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
-            Invoice? invoice = _invoiceRepository.GetSingleOrDefault(x => x.Status == "Pending" && x.UserId == userId);
-            if (invoice == null)
-            {
-                invoice = new Invoice { UserId = userId, Status = "pending", CreatedAt = DateTime.Now };
-                invoiceId = _invoiceRepository.Add(invoice);
-            }
-            else
-            {
-                invoiceId = invoice.Id;
-            }
-            //check if there is already an invoice item with the same product
-            var existingInvoiceItem = _invoiceItemRepository.GetSingleOrDefault(x => x.InvoiceId == invoiceId && x.ProductId == id);
-            if (existingInvoiceItem == null) {
-                _invoiceItemRepository.Add(new InvoiceItem
-                {
-                    InvoiceId = invoiceId,
-                    ProductId = id,
-                    UnitPrice = product.Price,
-                    Quantity = 1,
-                    Name = product.Name,
-                    UserId = userId,
-                });
-            }
-            else
-            {
-                existingInvoiceItem.UnitPrice = product.Price; // to be sure to have the last price
-                existingInvoiceItem.Quantity += 1;
-                _invoiceItemRepository.Update(existingInvoiceItem);
-            }
-            return this.GetById(invoiceId) ?? throw new Exception("Invoice not found");
         }
     }
 }

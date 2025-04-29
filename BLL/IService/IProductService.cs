@@ -1,4 +1,5 @@
 ﻿using BLL.DTOs.InputDTOs;
+using BLL.DTOs.OutputDTOs;
 using Domain;
 using Microsoft.AspNetCore.Http;
 
@@ -12,5 +13,6 @@ namespace BLL.IService
         public Product Update(int id, Product product, IFormFile? image);
         public void Delete(int id);
         public IEnumerable<string> GetCategories();
+        public void AddToInvoice(int id);
     }
 }

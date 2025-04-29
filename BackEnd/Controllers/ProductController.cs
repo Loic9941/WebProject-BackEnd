@@ -1,7 +1,8 @@
-﻿using BLL.DTOs.InputDTOs;
+﻿using Api;
+using BLL.DTOs.InputDTOs;
+using BLL.DTOs.OutputDTOs;
 using BLL.IService;
 using Domain;
-using Errors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,36 +21,49 @@ namespace API.Controllers
             this._productService = _productService;
         }
 
-        
         [HttpGet(Name = "GetProducts")]
-        public ActionResult<IEnumerable<Product>> GetProducts(ProductFiltersDTO? productFiltersDTO)
+        public ActionResult<IEnumerable<ProductOutputDTO>> GetProducts(ProductFiltersDTO? productFiltersDTO)
         {
-            return Ok(_productService.Get(productFiltersDTO));
+            return Ok(_productService.Get(productFiltersDTO).Select(x => x.MapToDTO()));
         }
 
         [HttpGet("{id}", Name = "GetProduct")]
-        public ActionResult<Product> GetProduct(int id)
+        public ActionResult<ProductOutputDTO> GetProduct(int id)
         {
             Product? product = _productService.GetById(id);
             if (product == null)
             {
                 return BadRequest();
             }
-            return Ok(product);
+            return Ok(product.MapToDTO());
         }
 
         [Authorize(Roles = "Artisan")]
         [HttpPost(Name = "AddProduct")]
         public ActionResult<Product> AddProduct([FromForm] Product product, IFormFile? image)
         {
-            return  Ok(_productService.Add(product, image));
+            try
+            {
+                return Ok(_productService.Add(product, image).MapToDTO());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize(Roles = "Artisan,Administrator")]
         [HttpPut("{id}", Name = "UpdateProduct")]
         public ActionResult<Product> PutProduct(int Id, [FromForm] Product product, IFormFile? image)
         {
-            return Ok(_productService.Update(Id, product, image));
+            try
+            {
+                return Ok(_productService.Update(Id, product, image).MapToDTO());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [Authorize(Roles = "Artisan,Administrator")]
@@ -68,11 +82,26 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Customer,Administrator,Artisan")]
-        [HttpGet("GetCategories",Name = "GetCategories")]
+        [HttpGet("GetCategories", Name = "GetCategories")]
         public ActionResult<IEnumerable<string>> GetCategories()
         {
             IEnumerable<string> listCategories = _productService.GetCategories();
             return Ok(listCategories);
+        }
+
+        [Authorize(Roles = "Customer")]
+        [HttpPost("{productId}/AddToInvoice", Name = "AddToShoppingCart")]
+        public ActionResult AddToShoppingCart(int productId)
+        {
+            try
+            {
+                _productService.AddToInvoice(productId);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

@@ -11,8 +11,6 @@ namespace Domain
         public required string Name { get; set; }
         public string? Description { get; set; }
 
-        public byte[] Image { get; set; } = [];
-
         [Column(TypeName = "money")]
         public decimal Price { get; set; }
 
@@ -27,5 +25,7 @@ namespace Domain
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         public Boolean Available { get; set; } = true;
+
+        public string? Image { get; set; }
     }
 }

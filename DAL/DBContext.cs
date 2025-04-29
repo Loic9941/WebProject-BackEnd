@@ -37,14 +37,6 @@ namespace DAL
 
             //Rating
           
-            /*modelBuilder.Entity<Rating>()
-                .HasOne(r => r.InvoiceItem)
-                .WithOne(p => p.Rating)
-                .OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<Rating>()
-                .HasIndex(r => new { r.InvoiceItem, r.UserId })
-                .IsUnique();
-            */
             modelBuilder.Entity<User>()
                 .HasMany(c => c.Products)
                 .WithOne(p => p.User)
@@ -82,10 +74,6 @@ namespace DAL
             modelBuilder.Entity<InvoiceItem>()
                 .Property(p => p.UnitPrice)
                 .HasColumnType("money");
-            /*modelBuilder.Entity<InvoiceItem>()
-                .HasOne(p => p.Rating)
-                .WithOne(r => r.InvoiceItem)
-                .OnDelete(DeleteBehavior.Cascade);*/
         }
     }
 }

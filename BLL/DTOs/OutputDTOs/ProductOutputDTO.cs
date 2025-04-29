@@ -7,8 +7,6 @@
         public required string Name { get; set; }
         public required string? Description { get; set; }
 
-        public required byte[] Image { get; set; } = [];
-
         public required decimal Price { get; set; }
 
         public required int? ArtisteId;
@@ -20,5 +18,7 @@
         public DateTime CreatedAt { get; set; }
 
         public required bool Available { get; set; }
+
+        public string? Image { get; set; }
     }
 }

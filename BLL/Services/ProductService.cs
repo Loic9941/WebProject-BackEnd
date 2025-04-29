@@ -39,7 +39,8 @@ namespace BLL.Services
             if (_authenticationService.IsArtisan())
             {
                 return _productRepository.Get(
-                    x => x.UserId == _authenticationService.GetUserId());
+                    x => x.UserId == _authenticationService.GetUserId(),
+                    o => o.OrderBy(x => x.CreatedAt));
             }
             if (productFiltersDTO != null)
             {
@@ -99,12 +100,23 @@ namespace BLL.Services
             {
                 using (var ms = new MemoryStream())
                 {
-                    image.CopyTo(ms);
-                    product.Image = ms.ToArray();
+                    var uploadsFolder = Path.Combine("wwwroot", "images");
+                    Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
+
+                    product.Image = $"/images/{uniqueFileName}";
                 }
             }
             var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
             product.UserId = userId;
+            
             _productRepository.Add(product);
             return product;
         }
@@ -133,10 +145,25 @@ namespace BLL.Services
             productToUpdate.Available = product.Available;
             if (image != null)
             {
+                if (productToUpdate.Image != null)
+                {
+                    var oldImagePath = Path.Combine("wwwroot", productToUpdate.Image.TrimStart('/'));
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
                 using (var ms = new MemoryStream())
                 {
-                    image.CopyTo(ms);
-                    productToUpdate.Image = ms.ToArray();
+                    var uploadsFolder = Path.Combine("wwwroot", "images");
+                    Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+                    var uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
+                    var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        image.CopyTo(fileStream);
+                    }
+                    productToUpdate.Image = $"/images/{uniqueFileName}";
                 }
             }
              _productRepository.Update(productToUpdate);

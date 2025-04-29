@@ -79,7 +79,7 @@ namespace Api
                 PickedUpAt = invoiceItem.PickedUpAt,
                 InTransitAt = invoiceItem.InTransitAt,
                 DeliveredAt = invoiceItem.DeliveredAt,
-                ProductImage = invoiceItem.Product is not null ? invoiceItem.Product.Image : [],
+                //ProductImage = invoiceItem.Product is not null ? invoiceItem.Product.Image : [], Fix me 
                 Rating = invoiceItem.Rating?.MapToDTO() ?? null
             };
         }

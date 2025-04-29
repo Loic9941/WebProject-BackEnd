@@ -44,6 +44,7 @@ namespace BLL.Services
             if (productFiltersDTO != null)
             {
                 Expression<Func<Product, bool>>? filter = PredicateBuilder.New<Product>(true);
+                filter = filter.And(x => x.Available == true);
                 if (productFiltersDTO.Search is not null && productFiltersDTO.Search!= "")
                 {
                     filter = filter.And(x => x.Name.Contains(productFiltersDTO.Search));
@@ -129,6 +130,7 @@ namespace BLL.Services
             productToUpdate.Description = product.Description;
             productToUpdate.Price = product.Price;
             productToUpdate.Category = product.Category;
+            productToUpdate.Available = product.Available;
             if (image != null)
             {
                 using (var ms = new MemoryStream())

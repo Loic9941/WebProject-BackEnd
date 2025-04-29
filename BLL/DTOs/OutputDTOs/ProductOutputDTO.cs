@@ -1,8 +1,4 @@
-﻿using Domain;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace BLL.DTOs.OutputDTOs
+﻿namespace BLL.DTOs.OutputDTOs
 {
     public class ProductOutputDTO
     {
@@ -22,5 +18,7 @@ namespace BLL.DTOs.OutputDTOs
         public required string Category { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public required bool Available { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Domain;
-namespace BLL.DTOs.OutputDTOs
+﻿namespace BLL.DTOs.OutputDTOs
 {
     public class RatingOutputDTO
     {

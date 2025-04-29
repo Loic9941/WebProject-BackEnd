@@ -25,5 +25,7 @@ namespace Domain
         public required string Category { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public Boolean Available { get; set; } = true;
     }
 }

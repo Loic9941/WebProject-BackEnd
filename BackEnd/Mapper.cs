@@ -97,6 +97,8 @@ namespace Api
                 Image = product.Image,
                 Price = product.Price,
                 Category = product.Category,
+                Available = product.Available,
+                CreatedAt = product.CreatedAt,
             };
         }
 

@@ -217,6 +217,170 @@ namespace DAL
                     }
                 );
             });
+
+            modelBuilder.Entity<Invoice>(i => {
+                i.HasData(
+                    new Invoice
+                    {
+                        Id = 1,
+                        UserId = 1,
+                        Status = "Paid",
+                        CreatedAt = new DateTime(2025, 5, 29, 14, 46, 41),
+                        PaidAt = new DateTime(2025, 5, 29, 14, 46, 41),
+                        DeliveryPartnerId = 4
+                    }
+                );
+            });
+
+            modelBuilder.Entity<InvoiceItem>(ii =>
+            {
+                ii.HasData(
+                    new InvoiceItem
+                    {
+                        Id = 1,
+                        UnitPrice = 800.00m,
+                        InvoiceId = 1,
+                        ProductId = 8,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 18),
+                        DeliveredAt = null,
+                        EstimatedDeliveryDate = null,
+                        ReadyToBePickedUp = null,
+                        InTransitAt = null,
+                        PickedUpAt = null,
+                        Status = "inPreparation",
+                        UserId = 1,
+                        Name = "Armoire à vin"
+                    },
+                    new InvoiceItem
+                    {
+                        Id = 2,
+                        UnitPrice = 245.00m,
+                        InvoiceId = 1,
+                        ProductId = 2,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 28),
+                        DeliveredAt = null,
+                        EstimatedDeliveryDate = null,
+                        ReadyToBePickedUp = null,
+                        InTransitAt = new DateTime(2025, 5, 29, 17, 41, 38),
+                        PickedUpAt = null,
+                        Status = "readyToBePickedUp",
+                        UserId = 1,
+                        Name = "Bord de mer"
+                    },
+                    new InvoiceItem
+                    {
+                        Id = 3,
+                        UnitPrice = 500.00m,
+                        InvoiceId = 1,
+                        ProductId = 1,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 34),
+                        DeliveredAt = null,
+                        EstimatedDeliveryDate = new DateOnly(2025, 3, 8),
+                        ReadyToBePickedUp = new DateTime(2025, 5, 29, 17, 41, 33),
+                        InTransitAt = null,
+                        PickedUpAt = new DateTime(2025, 5, 29, 17, 43, 3),
+                        Status = "pickedUp",
+                        UserId = 1,
+                        Name = "Coucher de soleil sur le fleuve"
+                    },
+                    new InvoiceItem
+                    {
+                        Id = 4,
+                        UnitPrice = 1200.00m,
+                        InvoiceId = 1,
+                        ProductId = 7,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 39),
+                        DeliveredAt = null,
+                        EstimatedDeliveryDate = null,
+                        ReadyToBePickedUp = null,
+                        InTransitAt = null,
+                        PickedUpAt = null,
+                        Status = "inPreparation",
+                        UserId = 1,
+                        Name = "Meuble de salon"
+                    },
+                    new InvoiceItem
+                    {
+                        Id = 5,
+                        UnitPrice = 900.00m,
+                        InvoiceId = 1,
+                        ProductId = 9,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 44),
+                        DeliveredAt = null,
+                        EstimatedDeliveryDate = null,
+                        ReadyToBePickedUp = null,
+                        InTransitAt = null,
+                        PickedUpAt = null,
+                        Status = "inPreparation",
+                        UserId = 1,
+                        Name = "Meuble TV"
+                    },
+                    new InvoiceItem
+                    {
+                        Id = 6,
+                        UnitPrice = 300.00m,
+                        InvoiceId = 1,
+                        ProductId = 3,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 48),
+                        DeliveredAt = new DateTime(2025, 5, 29, 17, 42, 38),
+                        EstimatedDeliveryDate = new DateOnly(2025, 3, 6),
+                        ReadyToBePickedUp = new DateTime(2025, 5, 29, 17, 41, 28),
+                        InTransitAt = new DateTime(2025, 5, 29, 17, 42, 34),
+                        PickedUpAt = new DateTime(2025, 5, 29, 17, 42, 24),
+                        Status = "delivered",
+                        UserId = 1,
+                        Name = "Peinture abstraite"
+                    },
+                    new InvoiceItem
+                    {
+                        Id = 7,
+                        UnitPrice = 65.00m,
+                        InvoiceId = 1,
+                        ProductId = 5,
+                        Quantity = 1,
+                        CreatedAt = new DateTime(2025, 5, 29, 15, 40, 53),
+                        DeliveredAt = null,
+                        EstimatedDeliveryDate = null,
+                        ReadyToBePickedUp = null,
+                        InTransitAt = null,
+                        PickedUpAt = null,
+                        Status = "inPreparation",
+                        UserId = 1,
+                        Name = "Pot antique"
+                    }
+                );
+            });
+
+            modelBuilder.Entity<Rating>(r =>
+            {
+                r.HasData(new Rating
+                {
+                    Id = 1,
+                    InvoiceItemId = 6,
+                    Rate = 5,
+                    Text = "Très belle peinture, livraison rapide !",
+                    CreatedAt = new DateTime(2025, 5, 29, 17, 43, 43)
+                });
+            });
+
+            modelBuilder.Entity<Comment>(c =>
+            {
+                c.HasData(
+                     new Comment
+                     {
+                         Id = 1,
+                         RatingId = 1,
+                         Text= "Merci pour votre commentaire positif !",
+                         CreatedAt = new DateTime(2025, 5, 29, 17, 43, 43)
+                     }
+                 );
+            });
         }
     }
 }

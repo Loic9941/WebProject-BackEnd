@@ -73,7 +73,7 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = "Artisan")]
-        [HttpPost]
+        [HttpPut]
         [Route("{id}/comment/{commentId}")]
         public ActionResult<RatingOutputDTO> UpdateComment(int id, int commentId, CommentDTO commentDTO)
         {

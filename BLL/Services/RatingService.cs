@@ -62,11 +62,11 @@ namespace BLL.Services
         public void SaveComment(int id, int? commentId, CommentDTO commentDTO)
         {
             var rating = _ratingRepository.GetSingleOrDefault(
-                x => x.Id == id
+                x => x.Id == id, "Comment"
             ) ?? throw new Exception("Rating not found");
             if (_authenticationService.IsArtisan())
             {
-                if (commentId is null)
+                if (rating.Comment is null)
                 {
                     rating.Comment = new Comment
                     {

@@ -9,9 +9,9 @@
 
         public required decimal Price { get; set; }
 
-        public required int? ArtisteId;
+        public required int? ArtisteId { get; set; }
 
-        public required string? ArtistFullName;
+        public required string? ArtistFullName { get; set; }
 
         public required string Category { get; set; }
 

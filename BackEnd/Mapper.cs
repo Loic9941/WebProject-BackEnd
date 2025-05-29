@@ -90,7 +90,7 @@ namespace Api
             return new ProductOutputDTO
             {
                 Id = product.Id,
-                ArtistFullName = product.User?.Firstname,
+                ArtistFullName = product.User?.Firstname + ' ' + product.User?.Lastname,
                 ArtisteId = product.User?.Id,
                 Name = product.Name,
                 Description = product.Description,

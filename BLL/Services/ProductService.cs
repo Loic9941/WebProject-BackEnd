@@ -123,7 +123,7 @@ namespace BLL.Services
 
         public Product? GetById(int Id)
         {
-            return _productRepository.GetSingleOrDefault(x => x.Id == Id);
+            return _productRepository.GetSingleOrDefault(x => x.Id == Id, "User");
         }
 
         public Product Update(int Id, Product product, IFormFile? image)

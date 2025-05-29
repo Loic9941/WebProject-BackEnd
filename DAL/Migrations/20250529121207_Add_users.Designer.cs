@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250529121207_Add_users")]
+    partial class Add_users
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -180,128 +183,6 @@ namespace DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Products");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Available = true,
-                            Category = "Peinture",
-                            CreatedAt = new DateTime(2025, 5, 29, 14, 46, 41, 0, DateTimeKind.Unspecified),
-                            Description = "Peinture sur toile datant de 1920",
-                            Image = "/images/491eea5e-ba08-46b5-8404-f73bce32f872_A1QdHDA29ML._AC_UF1000,1000_QL80_.jpg",
-                            Name = "Coucher de soleil sur le fleuve",
-                            Price = 500m,
-                            UserId = 6
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Available = true,
-                            Category = "Peinture",
-                            CreatedAt = new DateTime(2025, 5, 29, 16, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Aquarelle datant de 1963",
-                            Image = "/images/3bcd32f9-5452-427a-8219-2f863051a08f_images.jpg",
-                            Name = "Bord de mer",
-                            Price = 245m,
-                            UserId = 6
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Available = true,
-                            Category = "Peinture",
-                            CreatedAt = new DateTime(2025, 5, 29, 17, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Peinture abstraite aux tonalités bleues inspirantes",
-                            Image = "/images/8067df12-c43a-4ed6-92d1-c691d1be1954_peinture abstraite moderne bleue.jpg",
-                            Name = "Peinture abstraite",
-                            Price = 300m,
-                            UserId = 6
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Available = true,
-                            Category = "Poterie",
-                            CreatedAt = new DateTime(2025, 5, 29, 18, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Pot en céramique émaillée noir artisanal. Parfait pour mettre vos plantest",
-                            Image = "/images/393a53fa-20ae-4ff9-a781-83407db2b29b_pot-en-ceramique-emaillee-noir-o-39-x-31-cm.jpg",
-                            Name = "Pot en céramique émaillée",
-                            Price = 75m,
-                            UserId = 8
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Available = true,
-                            Category = "Poterie",
-                            CreatedAt = new DateTime(2025, 5, 29, 19, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Pot en terre cuite avec motifs",
-                            Image = "/images/bd71d69e-9734-4425-9fea-469dc5628a6c_images (1).jpg",
-                            Name = "Pot antique",
-                            Price = 65m,
-                            UserId = 8
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Available = true,
-                            Category = "Poterie",
-                            CreatedAt = new DateTime(2025, 5, 29, 20, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Pot de la couleur du soleil. Parfait pour apporter de la lumière dans votre maison",
-                            Image = "/images/26d077dd-4efb-43e4-8741-c483e6111be6_images (2).jpg",
-                            Name = "Poterie soleil",
-                            Price = 50m,
-                            UserId = 8
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Available = true,
-                            Category = "Menuiserie",
-                            CreatedAt = new DateTime(2025, 5, 29, 21, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Meuble de salon fait main en chêne véritable",
-                            Image = "/images/edbb4f5f-f889-41d8-b394-22791ea8e198_110.jpg",
-                            Name = "Meuble de salon",
-                            Price = 1200m,
-                            UserId = 7
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Available = true,
-                            Category = "Menuiserie",
-                            CreatedAt = new DateTime(2025, 5, 29, 22, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Armoire à vin en bois de cèdre assemblée à la main. Parfait pour stocker vos bouteilles.",
-                            Image = "/images/61ddf700-3b6b-4771-bca3-ffbd415adf1a_550x366.jpg",
-                            Name = "Armoire à vin",
-                            Price = 800m,
-                            UserId = 7
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Available = true,
-                            Category = "Menuiserie",
-                            CreatedAt = new DateTime(2025, 5, 29, 23, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Meuble TV en bois de placage de frene naturel. Teinte noisette",
-                            Image = "/images/2abf68ee-d6a6-4789-b9a7-b28d319f453e_meuble-tv-en-bois-de-placage-de-frene-naturel-en-teinte-noisette-en-plusieurs-tailles.jpg",
-                            Name = "Meuble TV",
-                            Price = 900m,
-                            UserId = 7
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Available = true,
-                            Category = "Sculpture",
-                            CreatedAt = new DateTime(2025, 5, 30, 21, 43, 43, 0, DateTimeKind.Unspecified),
-                            Description = "Sculpture ours polaire de 1m de hauteur",
-                            Image = "/images/4011b3dc-8808-4f91-8ac7-20f1c6a9c410_images (3).jpg",
-                            Name = "Sculpture ours polaire",
-                            Price = 1500m,
-                            UserId = 7
-                        });
                 });
 
             modelBuilder.Entity("Domain.Rating", b =>
@@ -424,7 +305,7 @@ namespace DAL.Migrations
                             Id = 6,
                             Email = "artiste1@test.be",
                             Firstname = "Rodin",
-                            Lastname = " ",
+                            Lastname = "Bpost",
                             PasswordHash = "D6B1EEBBA6E4556DA0E2",
                             Role = "Artisan",
                             Salt = "Thursday"

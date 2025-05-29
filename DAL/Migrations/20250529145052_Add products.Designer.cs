@@ -4,6 +4,7 @@ using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(DBContext))]
-    partial class DBContextModelSnapshot : ModelSnapshot
+    [Migration("20250529145052_Add products")]
+    partial class Addproducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -246,11 +249,11 @@ namespace DAL.Migrations
                         {
                             Id = 6,
                             Available = true,
-                            Category = "Poterie",
+                            Category = "Sculpture",
                             CreatedAt = new DateTime(2025, 5, 29, 20, 43, 43, 0, DateTimeKind.Unspecified),
                             Description = "Pot de la couleur du soleil. Parfait pour apporter de la lumière dans votre maison",
                             Image = "/images/26d077dd-4efb-43e4-8741-c483e6111be6_images (2).jpg",
-                            Name = "Poterie soleil",
+                            Name = "Potterie soleil",
                             Price = 50m,
                             UserId = 8
                         },

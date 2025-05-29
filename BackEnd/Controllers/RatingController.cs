@@ -58,7 +58,7 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Artisan")]
         [HttpPost]
-        [Route("{id}/comment")]
+        [Route("{id}/comments")]
         public ActionResult<RatingOutputDTO> AddComment(int id, CommentDTO commentDTO)
         {
             try
@@ -74,7 +74,7 @@ namespace Api.Controllers
 
         [Authorize(Roles = "Artisan")]
         [HttpPut]
-        [Route("{id}/comment/{commentId}")]
+        [Route("{id}/comments/{commentId}")]
         public ActionResult<RatingOutputDTO> UpdateComment(int id, int commentId, CommentDTO commentDTO)
         {
             try

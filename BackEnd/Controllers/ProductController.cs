@@ -82,7 +82,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Customer,Administrator,Artisan")]
-        [HttpGet("GetCategories", Name = "GetCategories")]
+        [HttpGet("Categories", Name = "Categories")]
         public ActionResult<IEnumerable<string>> GetCategories()
         {
             IEnumerable<string> listCategories = _productService.GetCategories();

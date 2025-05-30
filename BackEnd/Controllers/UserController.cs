@@ -38,7 +38,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("GetDeliveryPartners", Name = "GetDeliveryPartners")]
+        [HttpGet("DeliveryPartners", Name = "DeliveryPartners")]
         [Authorize(Roles = "Customer")]
         public ActionResult<IEnumerable<UserOutputDTO>> GetDeliveryPartners()
         {

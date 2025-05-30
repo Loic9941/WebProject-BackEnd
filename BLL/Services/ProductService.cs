@@ -42,6 +42,10 @@ namespace BLL.Services
                     x => x.UserId == _authenticationService.GetUserId(),
                     o => o.OrderBy(x => x.CreatedAt));
             }
+            if (_authenticationService.IsAdmin())
+            {
+                return _productRepository.Get();
+            }
             if (productFiltersDTO != null)
             {
                 Expression<Func<Product, bool>>? filter = PredicateBuilder.New<Product>(true);
@@ -101,7 +105,7 @@ namespace BLL.Services
                 using (var ms = new MemoryStream())
                 {
                     var uploadsFolder = Path.Combine("wwwroot", "images");
-                    Directory.CreateDirectory(uploadsFolder); // Ensure the directory exists
+                    Directory.CreateDirectory(uploadsFolder);
 
                     var uniqueFileName = Guid.NewGuid().ToString() + "_" + image.FileName;
                     var filePath = Path.Combine(uploadsFolder, uniqueFileName);

@@ -21,7 +21,7 @@ namespace Api.Controllers
             _ratingService = ratingService;
         }
 
-        [Authorize(Roles = "Artisan,Customer")]
+        [Authorize(Roles = "Artisan,Customer,Administrator")]
         [HttpGet]
         [Route("")]
         public ActionResult<IEnumerable<RatingOutputDTO>> GetRatings([FromQuery] int? productId)

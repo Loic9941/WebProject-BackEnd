@@ -25,6 +25,7 @@ namespace Api.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteUser")]
+        [Authorize(Roles = "Administrator")]
         public ActionResult DeleteUser(int id)
         {
             try
@@ -43,6 +44,36 @@ namespace Api.Controllers
         public ActionResult<IEnumerable<UserOutputDTO>> GetDeliveryPartners()
         {
             return Ok(_userService.GetDeliveryPartners().Select(x => x.MapToDTO()));
+        }
+
+        [HttpPut("{id}/Block", Name = "BlockUser")]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult BlockUser(int id)
+        {
+            try
+            {
+                _userService.BlockUser(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("{id}/Unblock", Name = "UnblockUser")]
+        [Authorize(Roles = "Administrator")]
+        public ActionResult UnblockUser(int id)
+        {
+            try
+            {
+                _userService.UnblockUser(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }

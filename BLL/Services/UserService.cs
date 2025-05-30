@@ -46,5 +46,27 @@ namespace BLL.Services
         {
             return _userRepository.Get(x => x.Role == "DeliveryPartner");
         }
+
+        public void BlockUser(int id)
+        {
+            User? user = this.GetById(id);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            user.IsBlocked = true;
+            _userRepository.Update(user);
+        }
+
+        public void UnblockUser(int id)
+        {
+            User? user = this.GetById(id);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            user.IsBlocked = false;
+            _userRepository.Update(user);
+        }
     }
 }

@@ -92,8 +92,13 @@ namespace BLL.Services
 
         public string Login(LoginDTO loginDTO)
         {
-            User? user = _userRepository.GetSingleOrDefault(User => User.Email.ToLower() == loginDTO.Email.ToLower()) ?? throw new Exception("Login failed; Invalid userID or password");
-
+            User? user = _userRepository.GetSingleOrDefault(
+                User => User.Email.ToLower() == loginDTO.Email.ToLower()    
+            ) ?? throw new Exception("Login failed; Invalid userID or password");
+            if (user.IsBlocked)
+            {
+                throw new Exception("Login failed; User is blocked");
+            }
             var passwordHash = HashPassword(loginDTO.Password, user.Salt);
             if (user.PasswordHash == passwordHash)
             {

@@ -37,7 +37,7 @@ namespace BLL.Services
                     "InvoiceItem,InvoiceItem.User,Comment"
                 );
             }
-            else if (_authenticationService.IsCustomer())
+            else if (_authenticationService.IsCustomer() || _authenticationService.IsAdmin())
             {
                 return _ratingRepository.Get(
                     filter,

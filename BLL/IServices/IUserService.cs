@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Microsoft.Identity.Client;
 
 namespace BLL.IServices
 {
@@ -9,5 +10,9 @@ namespace BLL.IServices
         public void DeleteUser(int id);
 
         public IEnumerable<User> GetDeliveryPartners();
+
+        public void BlockUser(int id);
+
+        public void UnblockUser(int id);
     }
 }

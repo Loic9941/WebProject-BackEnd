@@ -34,6 +34,7 @@ namespace Api
                 Lastname = user.Lastname,
                 Email = user.Email,
                 Role = user.Role,
+                IsBlocked = user.IsBlocked
             };
         }
 

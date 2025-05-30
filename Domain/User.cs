@@ -28,5 +28,6 @@ namespace Domain
 
         //this one are the products linked to the artist
         public List<Product> Products { get; set; } = [];
+        public bool IsBlocked { get; set; } = false;
     }
 }

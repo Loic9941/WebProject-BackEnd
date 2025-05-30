@@ -11,5 +11,7 @@
         public required string Firstname { get; set; }
 
         public required string Lastname { get; set; }
+
+        public required bool IsBlocked { get; set; }
     }
 }

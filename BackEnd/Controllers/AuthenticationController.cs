@@ -1,5 +1,5 @@
 ﻿using BLL.DTOs.InputDTOs;
-using BLL.IService;
+using BLL.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

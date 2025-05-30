@@ -1,6 +1,6 @@
 ﻿using BLL.DTOs.InputDTOs;
 
-namespace BLL.IService
+namespace BLL.IServices
 {
     public interface IAuthenticationService
     {

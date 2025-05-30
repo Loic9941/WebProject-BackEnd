@@ -1,12 +1,12 @@
-﻿using BLL.IService;
+﻿using BLL.IServices;
 using Domain;
-using DAL.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq.Expressions;
 using LinqKit;
 using BLL.DTOs.InputDTOs;
 using BLL.DTOs.OutputDTOs;
+using DAL.IRepositories;
 
 namespace BLL.Services
 {

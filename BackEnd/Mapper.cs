@@ -37,14 +37,6 @@ namespace Api
             };
         }
 
-        //comment
-        public static CommentOutputDTO MapToDTO(this Comment comment)
-        {
-            return new CommentOutputDTO
-            {
-            };
-        }
-
         //Invoice
         public static InvoiceOutputDTO MapToDTO(this Invoice invoice)
         {

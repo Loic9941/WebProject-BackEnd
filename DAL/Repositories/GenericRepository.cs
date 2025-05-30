@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using System.Linq.Expressions;
+using DAL.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace DAL.Repository
+namespace DAL.Repositories
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private readonly DBContext _context;
+        protected readonly DBContext _context;
 
         public GenericRepository(DBContext context)
         {

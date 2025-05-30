@@ -1,6 +1,6 @@
 ﻿using Domain;
 
-namespace BLL.IService
+namespace BLL.IServices
 {
     public interface IUserService
     {

@@ -1,6 +1,6 @@
 ﻿using BLL.DTOs.InputDTOs;
-using BLL.IService;
-using DAL.Repository;
+using BLL.IServices;
+using DAL.IRepositories;
 using Domain;
 using Errors;
 

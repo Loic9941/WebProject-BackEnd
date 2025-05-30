@@ -1,13 +1,14 @@
 using System.Text;
-using BLL.IService;
+using BLL.IServices;
 using BLL.Services;
 using DAL;
 using Domain;
-using DAL.Repository;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text.Json.Serialization;
+using DAL.IRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;

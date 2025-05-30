@@ -1,9 +1,8 @@
 ﻿using BLL.DTOs.InputDTOs;
-using BLL.DTOs.OutputDTOs;
 using Domain;
 using Microsoft.AspNetCore.Http;
 
-namespace BLL.IService
+namespace BLL.IServices
 {
     public interface IProductService
     {

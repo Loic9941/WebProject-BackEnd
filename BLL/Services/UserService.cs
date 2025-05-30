@@ -1,5 +1,5 @@
-﻿using BLL.IService;
-using DAL.Repository;
+﻿using BLL.IServices;
+using DAL.IRepositories;
 using Domain;
 
 namespace BLL.Services

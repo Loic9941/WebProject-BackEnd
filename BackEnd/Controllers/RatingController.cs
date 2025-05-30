@@ -1,6 +1,6 @@
 ﻿using BLL.DTOs.InputDTOs;
 using BLL.DTOs.OutputDTOs;
-using BLL.IService;
+using BLL.IServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

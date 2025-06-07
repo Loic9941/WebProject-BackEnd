@@ -86,5 +86,13 @@ namespace BLL.Services
                 throw new Exception("You are not authorized to add a comment to this rating");
             }
         }
+
+        public void DeleteComment(int id)
+        {
+            var rating = _ratingRepository.GetSingleOrDefault(
+                x => x.Id == id, "Comment"
+            ) ?? throw new Exception("Rating not found");
+            _ratingRepository.Delete(rating);
+        }
     }
 }

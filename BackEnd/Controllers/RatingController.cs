@@ -87,5 +87,20 @@ namespace Api.Controllers
                 return BadRequest(e.Message);
             }
         }
-    }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpDelete]
+        [Route("{id}")]
+        public ActionResult DeleteRating(int id)
+        {
+            try
+            {
+                _ratingService.DeleteComment(id);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
 }

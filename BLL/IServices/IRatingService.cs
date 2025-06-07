@@ -10,5 +10,7 @@ namespace BLL.IServices
         public Rating? GetRating(int id);
 
         public void SaveComment(int id, int? commentId, CommentDTO commentDTO);
+
+        public void DeleteComment(int id);
     }
 }

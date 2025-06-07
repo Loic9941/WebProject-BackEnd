@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/authentication")]
     public class AuthenticationController : ControllerBase
     {
         protected readonly IAuthenticationService _authenticationService;
@@ -16,7 +16,7 @@ namespace Api.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("Register")]
+        [HttpPost("register")]
         [AllowAnonymous]
         public ActionResult Register(RegisterDTO registerDTO)
         {
@@ -31,7 +31,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPost("Login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public ActionResult Login(LoginDTO loginDTO)
         {

@@ -39,14 +39,14 @@ namespace Api.Controllers
             }
         }
 
-        [HttpGet("DeliveryPartners", Name = "DeliveryPartners")]
+        [HttpGet("deliveryPartners", Name = "DeliveryPartners")]
         [Authorize(Roles = "Customer")]
         public ActionResult<IEnumerable<UserOutputDTO>> GetDeliveryPartners()
         {
             return Ok(_userService.GetDeliveryPartners().Select(x => x.MapToDTO()));
         }
 
-        [HttpPut("{id}/Block", Name = "BlockUser")]
+        [HttpPut("{id}/block", Name = "BlockUser")]
         [Authorize(Roles = "Administrator")]
         public ActionResult BlockUser(int id)
         {
@@ -61,7 +61,7 @@ namespace Api.Controllers
             }
         }
 
-        [HttpPut("{id}/Unblock", Name = "UnblockUser")]
+        [HttpPut("{id}/unblock", Name = "UnblockUser")]
         [Authorize(Roles = "Administrator")]
         public ActionResult UnblockUser(int id)
         {

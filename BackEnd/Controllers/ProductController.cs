@@ -82,7 +82,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Customer,Administrator,Artisan")]
-        [HttpGet("Categories", Name = "Categories")]
+        [HttpGet("categories", Name = "categories")]
         public ActionResult<IEnumerable<string>> GetCategories()
         {
             IEnumerable<string> listCategories = _productService.GetCategories();
@@ -90,7 +90,7 @@ namespace API.Controllers
         }
 
         [Authorize(Roles = "Customer")]
-        [HttpPost("{productId}/AddToInvoice", Name = "AddToShoppingCart")]
+        [HttpPost("{productId}/addToInvoice", Name = "addToShoppingCart")]
         public ActionResult AddToShoppingCart(int productId)
         {
             try

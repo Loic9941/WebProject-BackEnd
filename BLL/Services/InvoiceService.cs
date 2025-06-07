@@ -55,7 +55,7 @@ namespace BLL.Services
             return _invoiceRepository.Get();
         }
 
-        public Invoice? GetPendingInvoice()
+        public Invoice? Pending()
         {
             var userId = _authenticationService.GetUserId() ?? throw new Exception("User not found");
             return _invoiceRepository.GetSingleOrDefault(x => x.UserId == userId && x.Status == "pending", "InvoiceItems");

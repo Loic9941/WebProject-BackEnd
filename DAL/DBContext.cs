@@ -224,7 +224,7 @@ namespace DAL
                     {
                         Id = 1,
                         UserId = 1,
-                        Status = "Paid",
+                        Status = "paid",
                         CreatedAt = new DateTime(2025, 5, 29, 14, 46, 41),
                         PaidAt = new DateTime(2025, 5, 29, 14, 46, 41),
                         DeliveryPartnerId = 4

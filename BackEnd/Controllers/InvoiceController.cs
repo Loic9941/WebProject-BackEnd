@@ -34,12 +34,12 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = "Customer")]
-        [HttpGet("GetPendingInvoice", Name = "GetPendingInvoice")]
-        public ActionResult<InvoiceOutputDTO> GetPendingInvoice()
+        [HttpGet("pending", Name = "pending")]
+        public ActionResult<InvoiceOutputDTO> Pending()
         {
             try
             {
-                Invoice? invoice = _invoiceService.GetPendingInvoice();
+                Invoice? invoice = _invoiceService.Pending();
                 if (invoice is null)
                 {
                     return Ok(null);
@@ -53,7 +53,7 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = "Customer")]
-        [HttpPut("{id}/MarkAsPaid", Name = "MarkAsPaid")]
+        [HttpPut("{id}/markAsPaid", Name = "markAsPaid")]
         public ActionResult MarkAsPaid(int id, MarkInvoiceAsPaidDTO markAsPaidDTO)
         {
             try

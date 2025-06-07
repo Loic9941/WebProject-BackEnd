@@ -5,7 +5,7 @@ namespace BLL.IServices
 {
     public interface IInvoiceService
     {
-        public Invoice? GetPendingInvoice();
+        public Invoice? Pending();
 
         public Invoice? GetById(int id);
 
